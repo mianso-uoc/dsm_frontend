@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'http://localhost:8080/api/manufacturers';
+const API_URL = process.env.REACT_APP_BACKEND + '/api'
 
 class UserService {
   getPublicContent() {
