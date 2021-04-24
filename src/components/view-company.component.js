@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faUndo, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit, faUndo, faPlus, faMap } from '@fortawesome/free-solid-svg-icons'
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import DataTable from 'react-data-table-component';
@@ -75,7 +75,7 @@ export default class Company extends Component {
       });
   }
 
-  deleteMachine(id) {    
+  deleteMachine(id) {
     CompanyDataService.deleteMachine(id)
       .then(response => {
         console.log(response.data);
@@ -98,7 +98,34 @@ export default class Company extends Component {
       <div className="row">
         <div className="col-md-12">
           <h2>Fabricante {currentCompany.name}</h2>
+          <hr/>
 
+          <div className="row mb-2">
+            <div className="col-md-2"><strong>Dirección</strong></div>
+            <div className="col-md-10">{currentCompany.address}</div>
+          </div>
+          {currentCompany.city && <div className="row mb-2">
+            <div className="col-md-2"><strong>Ciudad</strong></div>
+            <div className="col-md-8">{currentCompany.city.name}</div>
+            <div className="col-md-2">
+              <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank">
+                <FontAwesomeIcon icon={faMap} className="mr-2"/>
+                Mapa
+              </a>
+            </div>
+          </div>}
+          <div className="row mb-2">
+            <div className="col-md-2"><strong>Teléfono</strong></div>
+            <div className="col-md-10">{currentCompany.phone}</div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-md-2"><strong>Latitud</strong></div>
+            <div className="col-md-10">{currentCompany.latitude}</div>
+          </div>
+          <div className="row mb-2">
+            <div className="col-md-2"><strong>Longitud</strong></div>
+            <div className="col-md-10">{currentCompany.longitude}</div>
+          </div>
           <div>
             <Link to={"/companies/" + currentCompany.id + "/addMachine"} className="btn btn-info float-right">
               <FontAwesomeIcon icon={faPlus} className="mr-2"/>
@@ -106,39 +133,44 @@ export default class Company extends Component {
             </Link>
           </div>
 
-          <h3>Máquina</h3>
+          <h3>Máquinas</h3>
 
-          <table className="table table-striped table-bordered table-hover">
-            <thead className="table-info">
-              <tr>
-                <th className="width20">Id</th>
-                <th className="width60">Producto</th>
-                <th className="width60">Nº serie</th>
-                <th className="width20">Acciones</th>
-              </tr>
-            </thead>
-            
-            <tbody>
-              {machines &&
-              machines.map((machine, index) => (
-                <tr key={index}>
-                  <td>{machine.id}</td>
-                  <td>{machine.product.name}</td>
-                  <td>{machine.serialNumber}</td>
-                  <td>
-                    <button
-                      className="btn btn-sm btn-danger"
-                      data-tip="Eliminar"
-                      onClick={() => {this.deleteMachine(machine.id)}}
-                    >
-                      <ReactTooltip />
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </td>
+          {machines.length > 0 &&
+            <table className="table table-striped table-bordered table-hover">
+              <thead className="table-info">
+                <tr>
+                  <th className="width20">Id</th>
+                  <th className="width60">Producto</th>
+                  <th className="width60">Nº serie</th>
+                  <th className="width20">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {machines &&
+                machines.map((machine, index) => (
+                  <tr key={index}>
+                    <td>{machine.id}</td>
+                    <td>{machine.product.name}</td>
+                    <td>{machine.serialNumber}</td>
+                    <td>
+                      <a
+                        className="text-danger"
+                        data-tip="Eliminar"
+                        onClick={() => {this.deleteMachine(machine.id)}}
+                      >
+                        <ReactTooltip />
+                        <FontAwesomeIcon icon={faTrash} />
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          }
+          {machines.length == 0 &&
+            <div className="alert alert-warning">No hay máquinas</div>
+          }
 
           <Link to={"/companies"} className="btn btn-outline-info btn-sm mr-1">
             <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
