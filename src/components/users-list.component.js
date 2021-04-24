@@ -29,9 +29,9 @@ const columnas = [
     cell: row => <span class={"badge badge-" + row.type}>{row.type}</span>
   },
   {
-    name: '',
+    name: 'Acciones',
     sortable: false,
-    cell: row => <a href={"/users/" + row.id} class="btn btn-info btn-sm"><FontAwesomeIcon icon={faEdit} /></a>,
+    cell: row => <a href={"/users/" + row.id} data-tip="Editar" class="text-info btn-sm"><ReactTooltip /><FontAwesomeIcon icon={faEdit} /></a>,
   }
 ]
 

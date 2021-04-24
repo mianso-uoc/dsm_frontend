@@ -17,6 +17,7 @@
     "react-bootstrap": "^1.5.2",
     "react-data-table-component": "^6.11.7",
     "react-dom": "^17.0.1",
+    "react-modal": "^3.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.0",
