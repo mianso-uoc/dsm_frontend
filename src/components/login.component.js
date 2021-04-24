@@ -55,7 +55,7 @@ export default class Login extends Component {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.email, this.state.password).then(
         () => {
-          this.props.history.push("/manufacturers");
+          this.props.history.push("/home");
           window.location.reload();
         },
         error => {

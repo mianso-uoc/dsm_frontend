@@ -25,6 +25,11 @@ import CompaniesList from "./components/companies-list.component";
 import Company from "./components/company.component";
 import AddCompany from "./components/add-company.component";
 import CompanyView from "./components/view-company.component";
+import AddMachine from "./components/add-machine.component";
+
+import IssuesList from "./components/issues-list.component";
+import IssueView from "./components/view-issue.component";
+import AddIssue from "./components/add-issue.component";
 
 import Home from "./components/home.component";
 import Login from "./components/login.component";
@@ -60,13 +65,7 @@ class App extends Component {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-info">
-          {currentUser && currentUser.type=='Administrator' && <a href="/users" className="navbar-brand">
-            <FontAwesomeIcon icon={faTools} className="mr-2 text-dark"/>DSMantenimiento
-          </a>}
-          {currentUser && currentUser.type=='Technician' && <a href="/users" className="navbar-brand">
-            <FontAwesomeIcon icon={faTools} className="mr-2 text-dark"/>DSMantenimiento
-          </a>}
-          {currentUser && currentUser.type=='Customer' && <a href="/users" className="navbar-brand">
+          {currentUser && <a href="/home" className="navbar-brand">
             <FontAwesomeIcon icon={faTools} className="mr-2 text-dark"/>DSMantenimiento
           </a>}
           {!currentUser && <a href="/login" className="navbar-brand">
@@ -74,7 +73,7 @@ class App extends Component {
           </a>}
           {currentUser && currentUser.type=='Technician' && <div className="navbar-nav">
             <li className="nav-item">
-              <Link to={"/manufacturers"} className="nav-link">
+              <Link to={"/issues"} className="nav-link">
                 Incidencias
               </Link>
             </li>
@@ -112,10 +111,11 @@ class App extends Component {
         <div className="container mt-3">
           <Switch>
             <Route exact path={["/login"]} component={Login} />
+            <Route exact path={["/home"]} component={Home} />
             <Route exact path={["/users"]} component={UsersList} />
             <Route exact path="/users/add" component={AddUser} />
             <Route path="/users/:id" component={User} />
-            <Route exact path={["/", "/manufacturers"]} component={ManufacturersList} />
+            <Route exact path={["/manufacturers"]} component={ManufacturersList} />
             <Route exact path="/manufacturers/add" component={AddManufacturer} />
             <Route path="/manufacturers/:id/view" component={ManufacturerView} />
             <Route path="/manufacturers/:id/addProduct" component={AddProduct} />
@@ -125,7 +125,12 @@ class App extends Component {
             <Route exact path={["/companies"]} component={CompaniesList} />
             <Route exact path="/companies/add" component={AddCompany} />
             <Route path="/companies/:id/view" component={CompanyView} />
+            <Route path="/companies/:id/addMachine" component={AddMachine} />
             <Route path="/companies/:id" component={Company} />
+
+            <Route exact path={["/", "/issues"]} component={IssuesList} />
+            <Route path="/issues/:id/view" component={IssueView} />
+            <Route exact path="/issues/add" component={AddIssue} />
 
           </Switch>
         </div>
