@@ -136,3 +136,7 @@
 .card-file {
   padding: 1em;
 }
+
+.preservar {
+  white-space: pre-line;
+}

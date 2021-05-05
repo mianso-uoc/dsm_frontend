@@ -30,6 +30,7 @@ import AddMachine from "./components/add-machine.component";
 import IssuesList from "./components/issues-list.component";
 import IssueView from "./components/view-issue.component";
 import AddIssue from "./components/add-issue.component";
+import AddDocument from "./components/add-document.component";
 
 import Home from "./components/home.component";
 import Login from "./components/login.component";
@@ -131,6 +132,7 @@ class App extends Component {
             <Route exact path={["/", "/issues"]} component={IssuesList} />
             <Route path="/issues/:id/view" component={IssueView} />
             <Route exact path="/issues/add" component={AddIssue} />
+            <Route exact path="/issues/:id/addDocument" component={AddDocument} />
 
           </Switch>
         </div>

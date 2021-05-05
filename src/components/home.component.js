@@ -6,7 +6,7 @@ import IssueDataService from "../services/issue.service";
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit, faPlus, faEye, faUser, faIndustry, faBoxes } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
 
 export default class Home extends Component {
@@ -22,38 +22,57 @@ export default class Home extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user,
-      });
-    }
-    this.retrieveIssues(user);
-  }
-
-  retrieveIssues(user) {
-    IssueDataService.getByTechnician(user.id)
+    UserService.get(user.id)
       .then(response => {
         this.setState({
-          issues: response.data
+          currentUser: response.data
         });
-        console.log(response.data);
+        this.retrieveIssues(response.data);
       })
       .catch(e => {
         console.log(e);
       });
+
+
   }
+
+  retrieveIssues(user) {
+    if (user.type =="Technician") {
+      IssueDataService.getByTechnician(user.id)
+        .then(response => {
+          this.setState({
+            issues: response.data
+          });
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    } else if (user.type =="Customer") {
+      IssueDataService.getByCompany(user.company.id)
+        .then(response => {
+          this.setState({
+            issues: response.data
+          });
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+      }
+    }
 
   render() {
     const { currentUser, issues } = this.state;
     return (
       <div>
-        {currentUser && currentUser.type =="Technician" && <div className="container">
-          
+        {currentUser && (currentUser.type =="Technician" || currentUser.type =="Customer") && <div className="container">
+
           {issues.length > 0 &&
             <div class="card">
               <div class="card-header">
-                <h3>Mis incidencias</h3>
+                {currentUser.type =="Technician" && <h3>Mis incidencias</h3>}
+                {currentUser.type =="Customer" && <h3>Incidencias - {currentUser.company.name}</h3>}
               </div>
               <div class="card-body">
                 <table className="table table-striped table-bordered table-hover">
@@ -62,12 +81,12 @@ export default class Home extends Component {
                       <th className="width20">Id</th>
                       <th className="width40">Título</th>
                       <th className="width20">Fecha</th>
-                      <th className="width20">Empresa</th>
+                      {currentUser.type =="Technician" && <th className="width20">Empresa</th>}
                       <th className="width20">Estado</th>
                       <th className="width10">Acciones</th>
                     </tr>
                   </thead>
-                  
+
                   <tbody>
                     {issues &&
                     issues.map((issue, index) => (
@@ -75,7 +94,7 @@ export default class Home extends Component {
                         <td>{issue.id}</td>
                         <td data-tip={issue.description} data-place="bottom"><ReactTooltip />{issue.title}</td>
                         <td>{new Date(issue.createDate).toLocaleDateString()}</td>
-                        <td>{issue.company.name}</td>
+                        {currentUser.type =="Technician" && <td>{issue.company.name}</td>}
                         <td><span className={"badge badge-" + issue.status}>{issue.status}</span></td>
                         <td>
                           <Link
@@ -85,21 +104,21 @@ export default class Home extends Component {
                           >
                             <FontAwesomeIcon icon={faEye} />
                           </Link>
-                          <Link
+                          {currentUser.type =="Technician" && <Link
                             to={"/issues/" + issue.id}
                             className="text-primary mr-1"
                             data-tip="Editar"
                           >
                             <FontAwesomeIcon icon={faEdit} />
-                          </Link>
-                          <a
+                          </Link>}
+                          {currentUser.type =="Technician" && <a
                             className="text-danger"
                             data-tip="Eliminar"
                             onClick={() => {this.deleteIssue(issue.id)}}
                           >
                             <ReactTooltip />
                             <FontAwesomeIcon icon={faTrash} />
-                          </a>
+                          </a>}
                         </td>
                       </tr>
                     ))}
@@ -112,7 +131,63 @@ export default class Home extends Component {
             <div className="alert alert-warning">No tienes incidencias asignadas</div>
           }
         </div>}
-        </div>   
+        {currentUser && currentUser.type =="Administrator" &&
+          <div>
+            <h3>Área de mantenimiento</h3>
+            <div className="row">
+              <Link
+                to={"/users"}
+                className="container col-md-4"
+              >
+                <div class="card card-success">
+                  <div class="card-header">
+                    <div className="row">
+                      <h1 className="col-md-3 text-primary"><FontAwesomeIcon icon={faUser} /></h1><h4 class="card-title col-md-9 text-dark">Usuarios</h4>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text text-dark">Gestión de usuarios que tienen acceso a la plataforma</p>
+                  </div>
+                </div>
+              </Link>
+              <Link
+                to={"/companies"}
+                className="container col-md-4"
+              >
+                <div class="card">
+                  <div class="card-header">
+                    <div className="row">
+                      <h1 className="col-md-3 text-success"><FontAwesomeIcon icon={faIndustry} /></h1><h4 class="card-title col-md-9 text-dark">Empresas</h4>
+                    </div>
+                    </div>
+
+                  <div class="card-body">
+                    <p class="card-text text-dark">Gestión de empresas clientes y sus máquinas</p>
+                  </div>
+                </div>
+              </Link>
+              <Link
+                to={"/manufacturers"}
+                className="container col-md-4"
+              >
+                <div class="card">
+                  <div class="card-header">
+                    <div className="row">
+                      <h1 className="col-md-3 text-warning"><FontAwesomeIcon icon={faBoxes} /></h1><h4 class="card-title col-md-9 text-dark">Fabricantes</h4>
+                    </div>
+                    </div>
+
+                  <div class="card-body">
+                    <p class="card-text text-dark">Mantenimiento de fabricantes y sus productos</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        }
+
+
+        </div>
     );
   }
 }
