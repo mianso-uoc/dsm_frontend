@@ -3,6 +3,19 @@ import ManufacturerDataService from "../services/manufacturer.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
+import CheckButton from "react-validation/build/button";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger col-sm-6 mt-1" role="alert">
+        Este campo es obligatorio
+      </div>
+    );
+  }
+};
 
 export default class AddManufacturer extends Component {
   constructor(props) {
@@ -14,6 +27,8 @@ export default class AddManufacturer extends Component {
     this.state = {
       id: null,
       name: "",
+      loading: false,
+      message: "",
 
       submitted: false
     };
@@ -25,25 +40,45 @@ export default class AddManufacturer extends Component {
     });
   }
 
-  saveManufacturer() {
+  saveManufacturer(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true
+    });
+
     var data = {
       name: this.state.name
     };
 
-    ManufacturerDataService.create(data)
-      .then(response => {
-        this.setState({
-          id: response.data.id,
-          name: response.data.name,
+    this.form.validateAll();
 
-          submitted: true
+    if (this.checkBtn.context._errors.length === 0) {
+      ManufacturerDataService.create(data)
+        .then(response => {
+          this.setState({
+            id: response.data.id,
+            name: response.data.name,
+
+            submitted: true
+          });
+          console.log(response.data);
+          this.props.history.push('/manufacturers');
+          window.location.reload();
+        })
+        .catch(e => {
+          console.log(e);
+          this.setState({
+            loading: false,
+            message: 'Se ha producido un error'
+          });
         });
-        console.log(response.data);
-        this.props.history.push('/manufacturers')
-      })
-      .catch(e => {
-        console.log(e);
+    } else {
+      this.setState({
+        loading: false
       });
+    }
   }
 
   newManufacturer() {
@@ -68,16 +103,24 @@ export default class AddManufacturer extends Component {
         ) : (
           <div>
             <h4>Nuevo fabricante</h4>
-            <div className="form-group row">
-              <label htmlFor="name" className="col-sm-1 col-form-label">Nombre</label>
-              <input
+
+            <Form
+              onSubmit={this.saveManufacturer}
+              ref={c => {
+                this.form = c;
+              }}
+            >
+
+            <div className="form-group">
+              <label htmlFor="name">Nombre</label>
+              <Input
                 type="text"
                 className="form-control col-sm-6"
                 id="name"
-                required 
                 value={this.state.name}
                 onChange={this.onChangeName}
                 name="name"
+                validations={[required]}
               />
             </div>
 
@@ -85,9 +128,32 @@ export default class AddManufacturer extends Component {
               <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
             </Link>
 
-            <button onClick={this.saveManufacturer} className="btn btn-info btn-sm">
+
+            <button
+              className="btn btn-info btn-sm"
+              disabled={this.state.loading}
+            >
+              {this.state.loading && (
+                <span className="spinner-border spinner-border-sm"></span>
+              )}
               <FontAwesomeIcon icon={faPlus} className="mr-2"/>Crear
             </button>
+
+            {this.state.message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {this.state.message}
+                </div>
+              </div>
+            )}
+            <CheckButton
+              style={{ display: "none" }}
+              ref={c => {
+                this.checkBtn = c;
+              }}
+            />
+          </Form>
+
           </div>
         )}
       </div>

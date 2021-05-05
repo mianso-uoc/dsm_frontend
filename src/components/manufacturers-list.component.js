@@ -76,7 +76,7 @@ export default class ManufacturersList extends Component {
       });
   }
 
-  deleteManufacturer(id) {    
+  deleteManufacturer(id) {
     ManufacturerDataService.delete(id)
       .then(response => {
         console.log(response.data);
@@ -132,7 +132,7 @@ export default class ManufacturersList extends Component {
                 <th className="width20">Acciones</th>
               </tr>
             </thead>
-            
+
             <tbody>
               {manufacturers &&
               manufacturers.map((manufacturer, index) => (
@@ -142,26 +142,26 @@ export default class ManufacturersList extends Component {
                   <td>
                     <Link
                       to={"/manufacturers/" + manufacturer.id + "/view"}
-                      className="btn btn-sm btn-info mr-1"
+                      className="text-dark mr-1"
                       data-tip="Ver"
                     >
                       <FontAwesomeIcon icon={faEye} />
                     </Link>
                     <Link
                       to={"/manufacturers/" + manufacturer.id}
-                      className="btn btn-sm btn-info mr-1"
+                      className="text-primary mr-1"
                       data-tip="Editar"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </Link>
-                    <button
-                      className="btn btn-sm btn-danger"
+                    <Link
+                      className="text-danger"
                       data-tip="Eliminar"
                       onClick={() => {this.deleteManufacturer(manufacturer.id)}}
                     >
                       <ReactTooltip />
                       <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

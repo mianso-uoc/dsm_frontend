@@ -82,7 +82,7 @@ export default class Manufacturer extends Component {
       });
   }
 
-  deleteProduct(id) {    
+  deleteProduct(id) {
     ManufacturerDataService.deleteProduct(id)
       .then(response => {
         console.log(response.data);
@@ -123,7 +123,7 @@ export default class Manufacturer extends Component {
                 <th className="width20">Acciones</th>
               </tr>
             </thead>
-            
+
             <tbody>
               {products &&
               products.map((product, index) => (
@@ -133,19 +133,19 @@ export default class Manufacturer extends Component {
                   <td>
                     <Link
                       to={"/products/" + product.id}
-                      className="btn btn-sm btn-info mr-1"
+                      className="text-primary mr-1"
                       data-tip="Editar"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </Link>
-                    <button
-                      className="btn btn-sm btn-danger"
+                    <Link
+                      className="text-danger"
                       data-tip="Eliminar"
                       onClick={() => {this.deleteProduct(product.id)}}
                     >
                       <ReactTooltip />
                       <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}

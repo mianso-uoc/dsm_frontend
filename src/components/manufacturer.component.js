@@ -3,6 +3,19 @@ import ManufacturerDataService from "../services/manufacturer.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo } from '@fortawesome/free-solid-svg-icons'
+import CheckButton from "react-validation/build/button";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger col-sm-6 mt-1" role="alert">
+        Este campo es obligatorio
+      </div>
+    );
+  }
+};
 
 export default class Manufacturer extends Component {
   constructor(props) {
@@ -17,6 +30,7 @@ export default class Manufacturer extends Component {
         id: null,
         name: ""
       },
+      loading: false,
       message: ""
     };
   }
@@ -51,21 +65,41 @@ export default class Manufacturer extends Component {
       });
   }
 
-  updateManufacturer() {
-    ManufacturerDataService.update(
-      this.state.currentManufacturer.id,
-      this.state.currentManufacturer
-    )
-      .then(response => {
-        console.log(response.data);
-        this.props.history.push('/manufacturers')
-      })
-      .catch(e => {
-        console.log(e);
+  updateManufacturer(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true
+    });
+
+    this.form.validateAll();
+
+    if (this.checkBtn.context._errors.length === 0) {
+      ManufacturerDataService.update(
+        this.state.currentManufacturer.id,
+        this.state.currentManufacturer
+      )
+        .then(response => {
+          console.log(response.data);
+          this.props.history.push('/manufacturers');
+          window.location.reload();
+        })
+        .catch(e => {
+          console.log(e);
+          this.setState({
+            loading: false,
+            message: 'Se ha producido un error'
+          });
+        });
+    } else {
+      this.setState({
+        loading: false
       });
+    }
   }
 
-  deleteManufacturer() {    
+  deleteManufacturer() {
     ManufacturerDataService.delete(this.state.currentManufacturer.id)
       .then(response => {
         console.log(response.data);
@@ -85,30 +119,36 @@ export default class Manufacturer extends Component {
           {currentManufacturer ? (
             <div className="edit-form">
               <h4>Fabricante</h4>
-              <form>
-                <div className="form-group row">
-                  <label htmlFor="name" className="col-sm-1 col-form-label">Nombre</label>
-                  <input
+              <Form
+                onSubmit={this.updateManufacturer}
+                ref={c => {
+                  this.form = c;
+                }}
+              >
+                <div className="form-group">
+                  <label htmlFor="name">Nombre</label>
+                  <Input
                     type="text"
                     className="form-control col-sm-6"
                     id="name"
                     value={currentManufacturer.name}
                     onChange={this.onChangeName}
+                    name="name"
+                    validations={[required]}
                   />
                 </div>
-              </form>          
-
-              <div>
-
                 <Link to={"/manufacturers"} className="btn btn-outline-info btn-sm mr-1">
                   <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
                 </Link>
 
+
                 <button
-                  type="submit"
                   className="btn btn-info btn-sm mr-1"
-                  onClick={this.updateManufacturer}
+                  disabled={this.state.loading}
                 >
+                  {this.state.loading && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
                   <FontAwesomeIcon icon={faEdit} className="mr-2"/>Guardar
                 </button>
 
@@ -118,7 +158,21 @@ export default class Manufacturer extends Component {
                 >
                   <FontAwesomeIcon icon={faTrash} className="mr-2"/>Eliminar
                 </button>
-              </div>
+
+                {this.state.message && (
+                  <div className="form-group">
+                    <div className="alert alert-danger" role="alert">
+                      {this.state.message}
+                    </div>
+                  </div>
+                )}
+                <CheckButton
+                  style={{ display: "none" }}
+                  ref={c => {
+                    this.checkBtn = c;
+                  }}
+                />
+              </Form>
 
               <p>{this.state.message}</p>
             </div>
