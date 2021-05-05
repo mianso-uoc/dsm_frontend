@@ -104,7 +104,7 @@ export default class Company extends Component {
             <div className="col-md-2"><strong>Dirección</strong></div>
             <div className="col-md-10">{currentCompany.address}</div>
           </div>
-          {currentCompany.city && <div className="row mb-2">
+          {currentCompany.latitude && currentCompany.longitude && <div className="row mb-2">
             <div className="col-md-2"><strong>Ciudad</strong></div>
             <div className="col-md-8">{currentCompany.city.name}</div>
             <div className="col-md-2">
@@ -151,7 +151,7 @@ export default class Company extends Component {
                 machines.map((machine, index) => (
                   <tr key={index}>
                     <td>{machine.id}</td>
-                    <td>{machine.product.name}</td>
+                    <td>{machine.product && machine.product.name}</td>
                     <td>{machine.serialNumber}</td>
                     <td>
                       <a
@@ -174,6 +174,13 @@ export default class Company extends Component {
 
           <Link to={"/companies"} className="btn btn-outline-info btn-sm mr-1">
             <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
+          </Link>
+          <Link
+            to={"/companies/" + currentCompany.id}
+            className="btn btn-sm btn-info mr-1"
+            data-tip="Editar"
+          >
+            <FontAwesomeIcon icon={faEdit} /> Editar
           </Link>
         </div>
       </div>

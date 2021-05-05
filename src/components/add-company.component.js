@@ -5,6 +5,19 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
+import CheckButton from "react-validation/build/button";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger col-sm-6 mt-1" role="alert">
+        Este campo es obligatorio
+      </div>
+    );
+  }
+};
 
 export default class AddCompany extends Component {
   constructor(props) {
@@ -33,6 +46,8 @@ export default class AddCompany extends Component {
       countries: [],
       provinces: [],
       cities: [],
+      loading: false,
+      message: "",
 
       submitted: false
     };
@@ -113,7 +128,14 @@ export default class AddCompany extends Component {
     });
   }
 
-  saveCompany() {
+  saveCompany(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true
+    });
+
     var data = {
       name: this.state.name,
       address: this.state.address,
@@ -123,25 +145,38 @@ export default class AddCompany extends Component {
       city: this.state.city
     };
 
-    CompanyDataService.create(data)
-      .then(response => {
-        this.setState({
-          id: response.data.id,
-          name: response.data.name,
-          address: response.data.address,
-          phone: response.data.phone,
-          latitude: response.data.latitude,
-          longitude: response.data.longitude,
-          city: response.data.city,
+    this.form.validateAll();
 
-          submitted: true
+    if (this.checkBtn.context._errors.length === 0) {
+      CompanyDataService.create(data)
+        .then(response => {
+          this.setState({
+            id: response.data.id,
+            name: response.data.name,
+            address: response.data.address,
+            phone: response.data.phone,
+            latitude: response.data.latitude,
+            longitude: response.data.longitude,
+            city: response.data.city,
+
+            submitted: true
+          });
+          console.log(response.data);
+          this.props.history.push('/companies');
+          window.location.reload();
+        })
+        .catch(e => {
+          console.log(e);
+          this.setState({
+            loading: false,
+            message: 'Se ha producido un error'
+          });
         });
-        console.log(response.data);
-        this.props.history.push('/companies')
-      })
-      .catch(e => {
-        console.log(e);
+    } else {
+      this.setState({
+        loading: false
       });
+    }
   }
 
   newCompany() {
@@ -172,29 +207,41 @@ export default class AddCompany extends Component {
         ) : (
           <div>
             <h4>Nueva empresa</h4>
+
+            <Form
+              onSubmit={this.saveCompany}
+              ref={c => {
+                this.form = c;
+              }}
+            >
+
             <div className="form-group row">
               <label htmlFor="name" className="col-sm-1 col-form-label">Nombre</label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                id="name"
-                required
-                value={this.state.name}
-                onChange={this.onChangeName}
-                name="name"
-              />
+              <div className="col-sm-11">
+                <Input
+                  type="text"
+                  className="form-control col-sm-6"
+                  id="name"
+                  value={this.state.name}
+                  onChange={this.onChangeName}
+                  name="name"
+                  validations={[required]}
+                />
+              </div>
             </div>
             <div className="form-group row">
               <label htmlFor="address" className="col-sm-1 col-form-label">Dirección</label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                id="address"
-                required
-                value={this.state.address}
-                onChange={this.onChangeAddress}
-                name="address"
-              />
+              <div className="col-sm-11">
+                <Input
+
+                  type="text"
+                  className="form-control col-sm-6"
+                  id="address"
+                  value={this.state.address}
+                  onChange={this.onChangeAddress}
+                  name="address"
+                />
+              </div>
             </div>
             <div className="form-group row">
               <label htmlFor="country" className="col-sm-1 col-form-label">País</label>
@@ -210,48 +257,71 @@ export default class AddCompany extends Component {
             </div>
             <div className="form-group row">
               <label htmlFor="phone" className="col-sm-1 col-form-label">Teléfono</label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                id="phone"
-                required
-                value={this.state.phone}
-                onChange={this.onChangePhone}
-                name="phone"
-              />
+              <div className="col-sm-11">
+                <Input
+                  type="text"
+                  className="form-control col-sm-6"
+                  id="phone"
+                  value={this.state.phone}
+                  onChange={this.onChangePhone}
+                  name="phone"
+                />
+              </div>
             </div>
             <div className="form-group row">
               <label htmlFor="latitude" className="col-sm-1 col-form-label">Latitud</label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                id="latitude"
-                required
-                value={this.state.latitude}
-                onChange={this.onChangeLatitude}
-                name="latitude"
-              />
+              <div className="col-sm-11">
+                <Input
+                  type="text"
+                  className="form-control col-sm-6"
+                  id="latitude"
+                  value={this.state.latitude}
+                  onChange={this.onChangeLatitude}
+                  name="latitude"
+                />
+              </div>
             </div>
             <div className="form-group row">
               <label htmlFor="longitude" className="col-sm-1 col-form-label">Longitud</label>
-              <input
-                type="text"
-                className="form-control col-sm-6"
-                id="longitude"
-                required
-                value={this.state.longitude}
-                onChange={this.onChangeLongitude}
-                name="longitude"
-              />
+              <div className="col-sm-11">
+                <Input
+                  type="text"
+                  className="form-control col-sm-6"
+                  id="longitude"
+                  value={this.state.longitude}
+                  onChange={this.onChangeLongitude}
+                  name="longitude"
+                />
+              </div>
             </div>
 
             <Link to={"/companies"} className="btn btn-outline-info btn-sm mr-1">
               <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
             </Link>
 
-            <button onClick={this.saveCompany} className="btn btn-info btn-sm">
+            <button
+              className="btn btn-info btn-sm"
+              disabled={this.state.loading}
+            >
+              {this.state.loading && (
+                <span className="spinner-border spinner-border-sm"></span>
+              )}
               <FontAwesomeIcon icon={faPlus} className="mr-2"/>Crear
             </button>
+            {this.state.message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {this.state.message}
+                </div>
+              </div>
+            )}
+            <CheckButton
+              style={{ display: "none" }}
+              ref={c => {
+                this.checkBtn = c;
+              }}
+            />
+          </Form>
           </div>
         )}
       </div>
