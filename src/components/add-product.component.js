@@ -10,7 +10,7 @@ import CheckButton from "react-validation/build/button";
 const required = value => {
   if (!value) {
     return (
-      <div className="alert alert-danger mt-1" role="alert">
+      <div className="alert alert-danger col-sm-6 mt-1" role="alert">
         Este campo es obligatorio
       </div>
     );
@@ -142,7 +142,7 @@ export default class AddProduct extends Component {
                   {this.state.loading && (
                     <span className="spinner-border spinner-border-sm"></span>
                   )}
-                  <FontAwesomeIcon icon={faPlus} className="mr-2"/>Crear                  
+                  <FontAwesomeIcon icon={faPlus} className="mr-2"/>Crear
                 </button>
               </div>
 
