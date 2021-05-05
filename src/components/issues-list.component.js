@@ -127,10 +127,11 @@ export default class IssuesList extends Component {
            <table className="table table-striped table-bordered table-hover">
             <thead className="table-info">
               <tr>
-                <th className="width20">Id</th>
+                <th className="width10">Id</th>
                 <th className="width40">Título</th>
-                <th className="width20">Fecha</th>
-                <th className="width20">Estado</th>
+                <th className="width10">Fecha</th>
+                <th className="width20">Técnico asignado</th>
+                <th className="width10">Estado</th>
                 <th className="width10">Acciones</th>
               </tr>
             </thead>
@@ -142,11 +143,12 @@ export default class IssuesList extends Component {
                   <td>{issue.id}</td>
                   <td>{issue.title}</td>
                   <td>{new Date(issue.createDate).toLocaleDateString()}</td>
+                  <td>{issue.technician && issue.technician.name}</td>
                   <td><span className={"badge badge-" + issue.status}>{issue.status}</span></td>
                   <td>
                     <Link
                       to={"/issues/" + issue.id + "/view"}
-                      className="text-secondary mr-1"
+                      className="text-dark mr-1"
                       data-tip="Ver"
                     >
                       <FontAwesomeIcon icon={faEye} />

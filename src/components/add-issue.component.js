@@ -66,7 +66,7 @@ export default class AddIssue extends Component {
           submitted: true
         });
         console.log(response.data);
-        this.props.history.push('/issues')
+        this.props.history.push('/issues/'+response.data.id+'/view')
       })
       .catch(e => {
         console.log(e);
