@@ -13,6 +13,10 @@ class IssueDataService {
     return axios.get(API_URL + `/issues/technician/${id}`, { headers: authHeader() });
   }
 
+  getByCompany(id) {
+    return axios.get(API_URL + `/issues/company/${id}`, { headers: authHeader() });
+  }
+
   get(id) {
     return axios.get(API_URL + `/issues/${id}`, { headers: authHeader() });
   }
@@ -25,8 +29,12 @@ class IssueDataService {
     return axios.put(API_URL + `/issues/${id}`, data, { headers: authHeader() });
   }
 
-  delete(id) {
-    return axios.delete(API_URL + `/issues/${id}`, { headers: authHeader() });
+  close(data) {
+    return axios.put(API_URL + `/issues/${data.id}/close`, data, { headers: authHeader() });
+  }
+
+  solve(data) {
+    return axios.put(API_URL + `/issues/${data.id}/solve`, data, { headers: authHeader() });
   }
 
 }
