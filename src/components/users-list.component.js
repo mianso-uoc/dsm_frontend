@@ -112,7 +112,7 @@ export default class UsersList extends Component {
       });
   }
 
-  deleteUser(id) {    
+  deleteUser(id) {
     UserDataService.delete(id)
       .then(response => {
         console.log(response.data);
@@ -171,7 +171,7 @@ export default class UsersList extends Component {
                 <th className="width10"></th>
               </tr>
             </thead>
-            
+
             <tbody>
               {users &&
               users.map((user, index) => (
@@ -207,7 +207,7 @@ export default class UsersList extends Component {
           */}
 
           {users.length == 0 &&
-            <div className="alert alert-warning">No hay fabricantes</div>
+            <div className="alert alert-warning">No hay usuarios</div>
           }
 
           <DataTable

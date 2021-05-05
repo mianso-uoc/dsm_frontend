@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import UserDataService from "../services/user.service";
+import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
+import Select from 'react-select'
 
 export default class AddUser extends Component {
   constructor(props) {
@@ -10,7 +12,7 @@ export default class AddUser extends Component {
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
-    this.onChangeCompanyId = this.onChangeCompanyId.bind(this);
+    this.onChangeCompany = this.onChangeCompany.bind(this);
     this.saveUser = this.saveUser.bind(this);
     this.newUser = this.newUser.bind(this);
 
@@ -19,10 +21,31 @@ export default class AddUser extends Component {
       name: "",
       email: "",
       type: "Administrator",
-      companyId: 1,
+      company: null,
+      companies: [],
 
       submitted: false
     };
+  }
+
+  componentDidMount() {
+    this.retrieveCompanies();
+  }
+
+  retrieveCompanies() {
+    CompanyDataService.getAll()
+      .then(response => {
+        console.log(response.data);
+          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+          const updatedJson = JSON.stringify( response.data );
+        this.setState({
+          companies: response.data
+        });
+
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   onChangeName(e) {
@@ -40,21 +63,26 @@ export default class AddUser extends Component {
       type: e.target.value
     });
   }
-  onChangeCompanyId(e) {
+  onChangeCompany(e) {
     this.setState({
-      companyId: e.target.value
+      company: e
     });
   }
 
   saveUser() {
     var data = {
+      id: 0,
       name: this.state.name,
       email: this.state.email,
-      type: this.state.type,
-      companyId: this.state.companyId
+      type: this.state.type
     };
 
-    UserDataService.create(data, this.state.companyId)
+    var companyId = 0;
+    if (this.state.company) {
+      companyId = this.state.company.id;
+    }
+
+    UserDataService.create(data, companyId)
       .then(response => {
         this.setState({
           id: response.data.id,
@@ -79,13 +107,18 @@ export default class AddUser extends Component {
       name: "",
       email: "",
       type: "Administrator",
-      companyId: 1,
+      company: null,
 
       submitted: false
     });
   }
 
+  renameKey ( obj, oldKey, newKey ) {
+    obj[newKey] = obj[oldKey];
+  }
+
   render() {
+    const {companies} = this.state;
     return (
       <div className="submit-form">
         {this.state.submitted ? (
@@ -104,7 +137,7 @@ export default class AddUser extends Component {
                 type="text"
                 className="form-control col-sm-6"
                 id="name"
-                required 
+                required
                 value={this.state.name}
                 onChange={this.onChangeName}
                 name="name"
@@ -117,7 +150,7 @@ export default class AddUser extends Component {
                 type="text"
                 className="form-control col-sm-6"
                 id="email"
-                required 
+                required
                 value={this.state.email}
                 onChange={this.onChangeEmail}
                 name="email"
@@ -129,7 +162,7 @@ export default class AddUser extends Component {
               <select
                 className="form-control col-sm-6"
                 id="type"
-                required 
+                required
                 value={this.state.type}
                 onChange={this.onChangeType}
                 name="type"
@@ -142,16 +175,7 @@ export default class AddUser extends Component {
 
             {this.state.type == 'Customer' && <div className="form-group row">
               <label htmlFor="companyId" className="col-sm-1 col-form-label">Empresa</label>
-              <select
-                className="form-control col-sm-6"
-                id="companyId"
-                required 
-                value={this.state.companyId}
-                onChange={this.onChangeCompanyId}
-                name="companyId"
-              >
-                <option value="1">1</option>
-              </select>
+              <Select options={companies} className="col-sm-6" onChange={this.onChangeCompany}/>
             </div>}
 
             <Link to={"/users"} className="btn btn-outline-info btn-sm mr-1">
