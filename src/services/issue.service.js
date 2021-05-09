@@ -17,6 +17,14 @@ class IssueDataService {
     return axios.get(API_URL + `/issues/company/${id}`, { headers: authHeader() });
   }
 
+  find(startDate, endDate, companyId) {
+    return axios.get(API_URL + `/issues/${startDate}/${endDate}/${companyId}`, { headers: authHeader() });
+  }
+
+  getByDates(startDate, endDate) {
+    return axios.get(API_URL + `/issues/${startDate}/${endDate}`, { headers: authHeader() });
+  }
+
   get(id) {
     return axios.get(API_URL + `/issues/${id}`, { headers: authHeader() });
   }

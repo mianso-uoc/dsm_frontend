@@ -1,38 +1,116 @@
 import React, { Component } from "react";
 import IssueDataService from "../services/issue.service";
+import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
+import Select from 'react-select'
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css"
 
 export default class IssuesList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchName = this.onChangeSearchName.bind(this);
+    this.onChangeStartDate = this.onChangeStartDate.bind(this);
+    this.onChangeEndDate = this.onChangeEndDate.bind(this);
+    this.onChangeCompany = this.onChangeCompany.bind(this);
     this.retrieveIssues = this.retrieveIssues.bind(this);
     this.refreshList = this.refreshList.bind(this);
     this.setActiveIssue = this.setActiveIssue.bind(this);
-    this.searchName = this.searchName.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
+
+    const currentDate = new Date();
 
     this.state = {
       issues: [],
       currentIssue: null,
       currentIndex: -1,
-      searchName: ""
+      startDate: 0,
+      endDate: currentDate,
+      company: null
     };
   }
 
   componentDidMount() {
     this.retrieveIssues();
+    this.retrieveCompanies();
   }
 
-  onChangeSearchName(e) {
-    const searchName = e.target.value;
-
+  onChangeStartDate(e) {
+    console.log(e);
     this.setState({
-      searchName: searchName
+      startDate: e
     });
+
+    IssueDataService.find(e.getTime(), this.state.endDate.getTime(), this.state.company.id)
+      .then(response => {
+        this.setState({
+          issues: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  onChangeEndDate(e) {
+    console.log(e);
+    this.setState({
+      endDate: e
+    });
+
+    var start = 0;
+    var end = 0;
+
+    if (this.state.startDate > 0) {
+      start = this.state.startDate.getTime();
+    }
+
+    if (this.state.endDate != undefined) {
+      end = this.state.endDate.getTime();
+    }
+
+    IssueDataService.find(start, end, this.state.company.id)
+      .then(response => {
+        this.setState({
+          issues: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  onChangeCompany(e) {
+    this.setState({
+      company: e
+    });
+
+    var start = 0;
+    var end = 0;
+
+    if (this.state.startDate > 0) {
+      start = this.state.startDate.getTime();
+    }
+
+    if (this.state.endDate != undefined) {
+      end = this.state.endDate.getTime();
+    }
+
+    IssueDataService.find(start, end, e.id)
+      .then(response => {
+        this.setState({
+          issues: response.data
+        });
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   retrieveIssues() {
@@ -42,6 +120,22 @@ export default class IssuesList extends Component {
           issues: response.data
         });
         console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  retrieveCompanies() {
+    CompanyDataService.getAll()
+      .then(response => {
+        console.log(response.data);
+          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+          const updatedJson = JSON.stringify( response.data );
+        this.setState({
+          companies: response.data
+        });
+
       })
       .catch(e => {
         console.log(e);
@@ -63,19 +157,6 @@ export default class IssuesList extends Component {
     });
   }
 
-  searchName() {
-    IssueDataService.findByName(this.state.searchName)
-      .then(response => {
-        this.setState({
-          issues: response.data
-        });
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
   deleteIssue(id) {
     IssueDataService.delete(id)
       .then(response => {
@@ -88,31 +169,15 @@ export default class IssuesList extends Component {
       });
   }
 
+  renameKey ( obj, oldKey, newKey ) {
+    obj[newKey] = obj[oldKey];
+  }
+
   render() {
-    const { searchName, issues, currentIssue, currentIndex } = this.state;
+    const { searchName, issues, currentIssue, currentIndex, companies, startDate, endDate } = this.state;
 
     return (
       <div className="row">
-        {/*<div className="col-md-12">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Buscar por nombre"
-              value={searchName}
-              onChange={this.onChangeSearchName}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchName}
-              >
-                Buscar
-              </button>
-            </div>
-          </div>
-        </div>*/}
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Incidencias</h2>
@@ -123,6 +188,27 @@ export default class IssuesList extends Component {
               </Link>
             </div>
           </div>
+          <div className="well">
+            <div className="form-group row">
+              <label htmlFor="company" className="col-sm-2 col-form-label">Fecha desde</label>
+              <DatePicker
+                selected={startDate}
+                onChange={date => this.onChangeStartDate(date)}
+                dateFormat="yyyy-MM-dd"
+                isClearable />
+              <label htmlFor="company" className="col-sm-2 col-form-label">Fecha hasta</label>
+              <DatePicker
+                selected={endDate}
+                onChange={date => this.onChangeEndDate(date)}
+                dateFormat="yyyy-MM-dd"
+                isClearable />
+            </div>
+            <div className="form-group row">
+              <label htmlFor="company" className="col-sm-2 col-form-label">Empresa</label>
+              <Select options={companies} className="col-sm-5" onChange={this.onChangeCompany}/>
+            </div>
+          </div>
+
           {issues.length > 0 &&
            <table className="table table-striped table-bordered table-hover">
             <thead className="table-info">
@@ -131,6 +217,7 @@ export default class IssuesList extends Component {
                 <th className="width40">Título</th>
                 <th className="width10">Fecha</th>
                 <th className="width20">Técnico asignado</th>
+                <th className="width20">Empresa</th>
                 <th className="width10">Estado</th>
                 <th className="width10">Acciones</th>
               </tr>
@@ -144,6 +231,7 @@ export default class IssuesList extends Component {
                   <td>{issue.title}</td>
                   <td>{new Date(issue.createDate).toLocaleDateString()}</td>
                   <td>{issue.technician && issue.technician.name}</td>
+                  <td>{issue.company && issue.company.name}</td>
                   <td><span className={"badge badge-" + issue.status}>{issue.status}</span></td>
                   <td>
                     <Link
