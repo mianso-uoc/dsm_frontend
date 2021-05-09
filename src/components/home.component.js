@@ -144,6 +144,7 @@ export default class Home extends Component {
                       selected={endDate}
                       onChange={date => this.onChangeEndDate(date)}
                       dateFormat="yyyy-MM-dd"
+                      maxDate = {new Date()}
                       isClearable />
                   </div>
                 </div>}

@@ -44,7 +44,13 @@ export default class IssuesList extends Component {
       startDate: e
     });
 
-    IssueDataService.find(e.getTime(), this.state.endDate.getTime(), this.state.company.id)
+    var companyId = null;
+
+    if (this.state.company != undefined) {
+      companyId = this.state.company.id;
+    }
+
+    IssueDataService.find(e.getTime(), this.state.endDate.getTime(), companyId)
       .then(response => {
         this.setState({
           issues: response.data
@@ -64,6 +70,7 @@ export default class IssuesList extends Component {
 
     var start = 0;
     var end = 0;
+    var companyId;
 
     if (this.state.startDate > 0) {
       start = this.state.startDate.getTime();
@@ -73,7 +80,11 @@ export default class IssuesList extends Component {
       end = this.state.endDate.getTime();
     }
 
-    IssueDataService.find(start, end, this.state.company.id)
+    if (this.state.company != undefined) {
+      companyId = this.state.company.id;
+    }
+
+    IssueDataService.find(start, end, companyId)
       .then(response => {
         this.setState({
           issues: response.data
@@ -201,6 +212,7 @@ export default class IssuesList extends Component {
                 selected={endDate}
                 onChange={date => this.onChangeEndDate(date)}
                 dateFormat="yyyy-MM-dd"
+                maxDate = {new Date()}
                 isClearable />
             </div>
             <div className="form-group row">

@@ -18,7 +18,12 @@ class IssueDataService {
   }
 
   find(startDate, endDate, companyId) {
-    return axios.get(API_URL + `/issues/${startDate}/${endDate}/${companyId}`, { headers: authHeader() });
+
+    if (companyId == undefined) {
+      return axios.get(API_URL + `/issues/${startDate}/${endDate}`, { headers: authHeader() });
+    } else {
+      return axios.get(API_URL + `/issues/${startDate}/${endDate}/${companyId}`, { headers: authHeader() });
+    }
   }
 
   getByDates(startDate, endDate) {
