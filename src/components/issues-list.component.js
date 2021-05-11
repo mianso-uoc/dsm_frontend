@@ -192,12 +192,6 @@ export default class IssuesList extends Component {
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Incidencias</h2>
-            <div className="col-md-2">
-              <Link to={"/issues/add"} className="btn btn-info float-right">
-                <FontAwesomeIcon icon={faPlus} className="mr-2"/>
-                Nuevo
-              </Link>
-            </div>
           </div>
           <div className="well">
             <div className="form-group row">
@@ -213,6 +207,7 @@ export default class IssuesList extends Component {
                 onChange={date => this.onChangeEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 maxDate = {new Date()}
+                todayButton="Hoy"
                 isClearable />
             </div>
             <div className="form-group row">
@@ -253,13 +248,13 @@ export default class IssuesList extends Component {
                     >
                       <FontAwesomeIcon icon={faEye} />
                     </Link>
-                    <Link
+                    {issue.status == 'PENDING' && <Link
                       to={"/issues/" + issue.id}
                       className="text-primary mr-1"
                       data-tip="Editar"
                     >
                       <FontAwesomeIcon icon={faEdit} />
-                    </Link>
+                    </Link>}
                   </td>
                 </tr>
               ))}

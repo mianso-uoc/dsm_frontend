@@ -368,10 +368,11 @@ export default class Issue extends Component {
             </div>
           }
 
-          <h5 className="mt-4">Documentos<FontAwesomeIcon icon={faFile} className="ml-2 text-info"/></h5>
+          {documents && documents.length > 0 && <div>
+            <h5 className="mt-4">Documentos<FontAwesomeIcon icon={faFile} className="ml-2 text-info"/></h5>
 
-          <div className="row">
-            {documents && documents.length > 0 && documents.map((document, index) => (
+            <div className="row">
+              {documents.map((document, index) => (
 
                 <div className="col-3">
                   <div className="card">
@@ -409,20 +410,20 @@ export default class Issue extends Component {
                     </div>
                   </div>
                 </div>
-            ))
-            }
-            <Modal size="xl" show={showModalDoc} onHide={() => {this.handleClose()}}>
-              <Modal.Header closeButton>
-                {currentDocument &&
-                  <span>{currentDocument.fileName}<span class="font-weight-light"> - Subido por {currentDocument.technician.name}</span></span>
-                }
-              </Modal.Header>
-              {currentDocument && <Modal.Body><img style={{width: '100%'}} src={"data:" + currentDocument.mimetype + ";base64," + currentDocument.file} class="card-img-top" alt={currentDocument.fileName} /></Modal.Body>}
+              )) }
+              <Modal size="xl" show={showModalDoc} onHide={() => {this.handleClose()}}>
+                <Modal.Header closeButton>
+                  {currentDocument &&
+                    <span>{currentDocument.fileName}<span class="font-weight-light"> - Subido por {currentDocument.technician.name}</span></span>
+                  }
+                </Modal.Header>
+                {currentDocument && <Modal.Body><img style={{width: '100%'}} src={"data:" + currentDocument.mimetype + ";base64," + currentDocument.file} class="card-img-top" alt={currentDocument.fileName} /></Modal.Body>}
 
-            </Modal>
-          </div>
+              </Modal>
+            </div>
+          </div>}
 
-          <h5 className="mt-2">Comentarios<FontAwesomeIcon icon={faComment} className="ml-2 text-info"/></h5>
+          {((currentIssue.comments && currentIssue.comments.length > 0) || currentIssue.status == 'PENDING') && <h5 className="mt-2">Comentarios<FontAwesomeIcon icon={faComment} className="ml-2 text-info"/></h5>}
 
           <ul class="list-group">
             {currentIssue.comments && currentIssue.comments.length > 0 && currentIssue.comments.map((comment, index) => (
@@ -504,6 +505,11 @@ export default class Issue extends Component {
                 <FontAwesomeIcon icon={faUndo} className="mr-2"/>Volver
               </Link>
 
+              <Link to={"/issues/" + currentIssue.id} className="btn btn-info btn-sm mr-1 mt-4">
+                <FontAwesomeIcon icon={faEdit} className="mr-2"/>
+                Editar
+              </Link>
+
               <a className="btn btn-danger btn-sm mr-1 mt-4"  data-place="bottom" data-tip="Cierra la incidencia en caso de que no pueda resolverse" onClick={() => {this.handleShowClose()}}>
                 <FontAwesomeIcon icon={faUndo} className="mr-2"/>Cerrar incidencia
                 <ReactTooltip />
@@ -514,7 +520,7 @@ export default class Issue extends Component {
                 <ReactTooltip />
               </a>}
 
-              <Link to={"/issues/" + currentIssue.id + "/addMachine"} className="btn btn-info btn-sm mr-1 mt-4">
+              <Link to={"/issues/" + currentIssue.id + "/machines"} className="btn btn-info btn-sm mr-1 mt-4">
                 <FontAwesomeIcon icon={faPlus} className="mr-2"/>
                 Añadir máquina
               </Link>

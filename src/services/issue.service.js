@@ -50,6 +50,14 @@ class IssueDataService {
     return axios.put(API_URL + `/issues/${data.id}/solve`, data, { headers: authHeader() });
   }
 
+  addMachine(issueId, machineId) {
+    return axios.put(API_URL + `/issues/${issueId}/machine/${machineId}`, null, { headers: authHeader() });
+  }
+
+  removeMachine(issueId, machineId) {
+    return axios.delete(API_URL + `/issues/${issueId}/machine/${machineId}`, null, { headers: authHeader() });
+  }
+
 }
 
 export default new IssueDataService();

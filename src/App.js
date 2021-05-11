@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import { faUser, faTools, faKey, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faTools, faKey, faSignOutAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -29,8 +29,10 @@ import AddMachine from "./components/add-machine.component";
 
 import IssuesList from "./components/issues-list.component";
 import IssueView from "./components/view-issue.component";
+import Issue from "./components/issue.component";
 import AddIssue from "./components/add-issue.component";
 import AddDocument from "./components/add-document.component";
+import IssueMachines from "./components/issue-machines.component";
 
 import Home from "./components/home.component";
 import Login from "./components/login.component";
@@ -76,6 +78,12 @@ class App extends Component {
             <li className="nav-item">
               <Link to={"/issues"} className="nav-link">
                 Incidencias
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={"/issues/add"} className="btn btn-warning ml-5">
+                <FontAwesomeIcon icon={faPlus} className="mr-2"/>
+                Nueva incidencia
               </Link>
             </li>
           </div>}
@@ -132,7 +140,9 @@ class App extends Component {
             <Route exact path={["/", "/issues"]} component={IssuesList} />
             <Route path="/issues/:id/view" component={IssueView} />
             <Route exact path="/issues/add" component={AddIssue} />
+            <Route exact path="/issues/:id" component={Issue} />
             <Route exact path="/issues/:id/addDocument" component={AddDocument} />
+            <Route exact path="/issues/:id/machines" component={IssueMachines} />
 
           </Switch>
         </div>

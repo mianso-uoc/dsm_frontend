@@ -6,7 +6,7 @@ import IssueDataService from "../services/issue.service";
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faPlus, faEye, faUser, faIndustry, faBoxes } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faPlus, faEye, faUser, faIndustry, faBoxes } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select'
 import DatePicker from "react-datepicker";
@@ -137,15 +137,14 @@ export default class Home extends Component {
                     <DatePicker
                       selected={startDate}
                       onChange={date => this.onChangeStartDate(date)}
-                      dateFormat="yyyy-MM-dd"
-                      isClearable />
+                      dateFormat="yyyy-MM-dd" />
                     <label htmlFor="company" className="col-sm-2 col-form-label">Fecha hasta</label>
                     <DatePicker
                       selected={endDate}
                       onChange={date => this.onChangeEndDate(date)}
                       dateFormat="yyyy-MM-dd"
-                      maxDate = {new Date()}
-                      isClearable />
+                      todayButton="Hoy"
+                      maxDate = {new Date()} />
                   </div>
                 </div>}
 
@@ -185,14 +184,6 @@ export default class Home extends Component {
                           >
                             <FontAwesomeIcon icon={faEdit} />
                           </Link>}
-                          {currentUser.type =="Technician" && <a
-                            className="text-danger"
-                            data-tip="Eliminar"
-                            onClick={() => {this.deleteIssue(issue.id)}}
-                          >
-                            <ReactTooltip />
-                            <FontAwesomeIcon icon={faTrash} />
-                          </a>}
                         </td>
                       </tr>
                     ))}

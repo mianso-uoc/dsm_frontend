@@ -161,7 +161,7 @@ export default class AddIssue extends Component {
             <div className="form-group row">
               <label htmlFor="description" className="col-sm-2 col-form-label">Descripción</label>
               <textarea
-                rows="4"
+                rows="5"
                 type="text"
                 className="form-control col-sm-8"
                 id="description"
