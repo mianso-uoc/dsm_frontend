@@ -13,6 +13,10 @@ class CompanyDataService {
     return axios.get(API_URL + `/companies/${id}`, { headers: authHeader() });
   }
 
+  getByMachine(id) {
+    return axios.get(API_URL + `/companies/machines/${id}`, { headers: authHeader() });
+  }
+
   create(data) {
     return axios.post(API_URL + `/companies`, data, { headers: authHeader() });
   }

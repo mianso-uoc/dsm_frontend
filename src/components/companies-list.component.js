@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class CompaniesList extends Component {
   constructor(props) {
@@ -82,8 +84,26 @@ export default class CompaniesList extends Component {
         console.log(response.data);
         this.props.history.push('/companies');
         this.refreshList()
+        toast.success('Se ha eliminado la empresa ' + id, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       })
       .catch(e => {
+        toast.error('Se ha producido un error al eliminar la empresa', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         console.log(e);
       });
   }
@@ -116,6 +136,7 @@ export default class CompaniesList extends Component {
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Empresas</h2>
+            <ToastContainer />
             <div className="col-md-2">
               <Link to={"/companies/add"} className="btn btn-info float-right">
                 <FontAwesomeIcon icon={faPlus} className="mr-2"/>

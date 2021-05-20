@@ -13,6 +13,10 @@ class ManufacturerDataService {
     return axios.get(API_URL + `/manufacturers/${id}`, { headers: authHeader() });
   }
 
+  getByProduct(id) {
+    return axios.get(API_URL + `/manufacturers/products/${id}`, { headers: authHeader() });
+  }
+
   create(data) {
     return axios.post(API_URL + "/manufacturers", data, { headers: authHeader() });
   }

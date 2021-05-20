@@ -143,9 +143,9 @@ export default class Login extends Component {
           <p>Usuarios de prueba:</p>
           <table>
             <thead><th>Rol</th><th>Usuario</th><th>Password</th></thead>
-            <tbody><tr><td>Administrador</td><td>mianso</td><td>admin</td></tr>
-            <tr><td>Técnico</td><td>jon</td><td>admin</td></tr>
-            <tr><td>Cliente</td><td>cliente</td><td>admin</td></tr></tbody>
+            <tbody><tr><td>Admin</td><td>admin@admin.com</td><td>admin</td></tr>
+            <tr><td>Técnico</td><td>tech1@ds.com</td><td>admin</td></tr>
+            <tr><td>Cliente</td><td>cliente1@cl.com</td><td>admin</td></tr></tbody>
           </table>
         </div>
         <div>

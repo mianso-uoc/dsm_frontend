@@ -8,6 +8,8 @@ import Select from 'react-select'
 import CheckButton from "react-validation/build/button";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const required = value => {
   if (!value) {
@@ -266,6 +268,7 @@ export default class Company extends Component {
           {currentCompany ? (
             <div className="edit-form">
               <h4>Empresa</h4>
+              <ToastContainer />
                 <Form
                   onSubmit={this.updateCompany}
                   ref={c => {

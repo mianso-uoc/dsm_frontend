@@ -23,6 +23,12 @@ const columnas = [
     sortable: true
   },
   {
+    name: "Empresa",
+    selector: "",
+    sortable: false,
+    cell: row => <span>{row.company && row.company.name}</span>
+  },
+  {
     name: "Rol",
     selector: "type",
     sortable: true,
@@ -159,7 +165,7 @@ export default class UsersList extends Component {
               </Link>
             </div>
           </div>
-          {/*users.length > 0 &&
+          {users.length > 0 &&
            <table className="table table-striped table-bordered table-hover">
             <thead className="table-info">
               <tr>
@@ -204,12 +210,12 @@ export default class UsersList extends Component {
               ))}
             </tbody>
           </table>
-          */}
+          }
 
           {users.length == 0 &&
             <div className="alert alert-warning">No hay usuarios</div>
           }
-
+          {/*
           <DataTable
             columns={columnas}
             data={users}
@@ -219,7 +225,7 @@ export default class UsersList extends Component {
             highlightOnHover
             defaultSortField="Id"
             noHeader
-          />
+          />*/}
         </div>
       </div>
     );

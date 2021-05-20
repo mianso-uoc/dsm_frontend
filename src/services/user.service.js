@@ -21,8 +21,8 @@ class UserDataService {
     return axios.post(API_URL + `/users?companyId=${companyId}`, data, { headers: authHeader() });
   }
 
-  update(id, data) {
-    return axios.put(API_URL + `/users/${id}`, data, { headers: authHeader() });
+  update(id, data, companyId) {
+    return axios.put(API_URL + `/users/${id}?companyId=${companyId}`, data, { headers: authHeader() });
   }
 
   delete(id) {

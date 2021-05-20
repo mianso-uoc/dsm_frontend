@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import UserDataService from "../services/user.service";
+import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo } from '@fortawesome/free-solid-svg-icons'
+import Select from 'react-select'
 
 export default class User extends Component {
   constructor(props) {
@@ -10,7 +12,7 @@ export default class User extends Component {
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
-    this.onChangeCompanyId = this.onChangeCompanyId.bind(this);
+    this.onChangeCompany = this.onChangeCompany.bind(this);
     this.getUser = this.getUser.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
@@ -21,7 +23,8 @@ export default class User extends Component {
         name: "",
         email: "",
         type: "Administrator",
-        companyId: 1
+        companyId: null,
+        companies: []
       },
       message: ""
     };
@@ -29,6 +32,23 @@ export default class User extends Component {
 
   componentDidMount() {
     this.getUser(this.props.match.params.id);
+      this.retrieveCompanies();
+  }
+
+  retrieveCompanies() {
+    CompanyDataService.getAll()
+      .then(response => {
+        console.log(response.data);
+          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+          const updatedJson = JSON.stringify( response.data );
+        this.setState({
+          companies: response.data
+        });
+
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   onChangeName(e) {
@@ -67,15 +87,16 @@ export default class User extends Component {
       };
     });
   }
-  onChangeCompanyId(e) {
-    const companyId = e.target.value;
+  onChangeCompany(e) {
+    const company = e;
 
     this.setState(function(prevState) {
       return {
         currentUser: {
           ...prevState.currentUser,
-          companyId: companyId
-        }
+          company: company
+        },
+        companyId: company.id
       };
     });
   }
@@ -98,13 +119,15 @@ export default class User extends Component {
   }
 
   updateUser() {
+    console.log("GUARDANDO");
+    console.log(this.state.currentUser);
     UserDataService.update(
       this.state.currentUser.id,
-      this.state.currentUser
+      this.state.currentUser,
+      this.state.companyId
     )
       .then(response => {
         console.log(response.data);
-        console.log("UPDATE")
         this.props.history.push('/users')
       })
       .catch(e => {
@@ -112,7 +135,7 @@ export default class User extends Component {
       });
   }
 
-  deleteUser() {    
+  deleteUser() {
     UserDataService.delete(this.state.currentUser.id)
       .then(response => {
         console.log(response.data);
@@ -123,8 +146,12 @@ export default class User extends Component {
       });
   }
 
+  renameKey ( obj, oldKey, newKey ) {
+    obj[newKey] = obj[oldKey];
+  }
+
   render() {
-    const { currentUser } = this.state;
+    const { currentUser, companies } = this.state;
 
     return (
       <div className="row">
@@ -150,7 +177,7 @@ export default class User extends Component {
                     type="text"
                     className="form-control col-sm-6"
                     id="email"
-                    required 
+                    required
                     value={currentUser.email}
                     onChange={this.onChangeEmail}
                     name="email"
@@ -162,7 +189,7 @@ export default class User extends Component {
                   <select
                     className="form-control col-sm-6"
                     id="type"
-                    required 
+                    required
                     value={currentUser.type}
                     onChange={this.onChangeType}
                     name="type"
@@ -175,19 +202,10 @@ export default class User extends Component {
 
                 {currentUser.type == 'Customer' && <div className="form-group row">
                   <label htmlFor="companyId" className="col-sm-1 col-form-label">Empresa</label>
-                  <select
-                    className="form-control col-sm-6"
-                    id="companyId"
-                    required 
-                    value={currentUser.companyId}
-                    onChange={this.onChangeCompanyId}
-                    name="companyId"
-                  >
-                    <option value="1">1</option>
-                  </select>
+                  <Select options={companies} className="col-sm-6" onChange={this.onChangeCompany}/>
                 </div>}
 
-              </form>          
+              </form>
 
               <div>
 

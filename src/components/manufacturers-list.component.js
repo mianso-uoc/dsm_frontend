@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class ManufacturersList extends Component {
   constructor(props) {
@@ -81,9 +83,27 @@ export default class ManufacturersList extends Component {
       .then(response => {
         console.log(response.data);
         this.props.history.push('/manufacturers');
-        this.refreshList()
+        this.refreshList();
+        toast.success('Se ha eliminado el fabricante', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       })
       .catch(e => {
+        toast.error('Se ha producido un error al eliminar el fabricante', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         console.log(e);
       });
   }
@@ -116,6 +136,7 @@ export default class ManufacturersList extends Component {
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Fabricantes</h2>
+            <ToastContainer />
             <div className="col-md-2">
               <Link to={"/manufacturers/add"} className="btn btn-info float-right">
                 <FontAwesomeIcon icon={faPlus} className="mr-2"/>

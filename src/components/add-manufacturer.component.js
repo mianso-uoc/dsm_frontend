@@ -6,6 +6,8 @@ import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
 import CheckButton from "react-validation/build/button";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const required = value => {
   if (!value) {
@@ -27,10 +29,7 @@ export default class AddManufacturer extends Component {
     this.state = {
       id: null,
       name: "",
-      loading: false,
-      message: "",
-
-      submitted: false
+      message: ""
     };
   }
 
@@ -44,8 +43,7 @@ export default class AddManufacturer extends Component {
     e.preventDefault();
 
     this.setState({
-      message: "",
-      loading: true
+      message: ""
     });
 
     var data = {
@@ -59,25 +57,27 @@ export default class AddManufacturer extends Component {
         .then(response => {
           this.setState({
             id: response.data.id,
-            name: response.data.name,
-
-            submitted: true
+            name: response.data.name
           });
           console.log(response.data);
+          toast.success('Se ha creado el fabricante', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
           this.props.history.push('/manufacturers');
-          window.location.reload();
+          //window.location.reload();
         })
         .catch(e => {
           console.log(e);
           this.setState({
-            loading: false,
             message: 'Se ha producido un error'
           });
         });
-    } else {
-      this.setState({
-        loading: false
-      });
     }
   }
 
@@ -92,7 +92,7 @@ export default class AddManufacturer extends Component {
 
   render() {
     return (
-      <div className="submit-form">
+      <div className="submit-form"><ToastContainer />
         {this.state.submitted ? (
           <div>
             <h4>You submitted successfully!</h4>
@@ -131,11 +131,7 @@ export default class AddManufacturer extends Component {
 
             <button
               className="btn btn-info btn-sm"
-              disabled={this.state.loading}
             >
-              {this.state.loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
               <FontAwesomeIcon icon={faPlus} className="mr-2"/>Crear
             </button>
 

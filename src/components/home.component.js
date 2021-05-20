@@ -168,7 +168,11 @@ export default class Home extends Component {
                         <td data-tip={issue.description} data-place="bottom"><ReactTooltip />{issue.title}</td>
                         <td>{new Date(issue.createDate).toLocaleDateString()}</td>
                         {currentUser.type =="Technician" && <td>{issue.company.name}</td>}
-                        <td><span className={"badge badge-" + issue.status}>{issue.status}</span></td>
+                        <td><span className={"badge badge-" + issue.status}>
+                          {issue.status == 'PENDING' && 'PENDIENTE'}
+                          {issue.status == 'CLOSED' && 'CERRADA'}
+                          {issue.status == 'SOLVED' && 'RESUELTA'}</span>
+                        </td>
                         <td>
                           <Link
                             to={"/issues/" + issue.id + "/view"}

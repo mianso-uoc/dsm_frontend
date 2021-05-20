@@ -26,6 +26,7 @@ import Company from "./components/company.component";
 import AddCompany from "./components/add-company.component";
 import CompanyView from "./components/view-company.component";
 import AddMachine from "./components/add-machine.component";
+import Machine from "./components/machine.component";
 
 import IssuesList from "./components/issues-list.component";
 import IssueView from "./components/view-issue.component";
@@ -119,6 +120,7 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
+            <Route exact path={["/"]} component={Login} />
             <Route exact path={["/login"]} component={Login} />
             <Route exact path={["/home"]} component={Home} />
             <Route exact path={["/users"]} component={UsersList} />
@@ -136,8 +138,9 @@ class App extends Component {
             <Route path="/companies/:id/view" component={CompanyView} />
             <Route path="/companies/:id/addMachine" component={AddMachine} />
             <Route path="/companies/:id" component={Company} />
+            <Route path="/machines/:id" component={Machine} />
 
-            <Route exact path={["/", "/issues"]} component={IssuesList} />
+            <Route exact path={["/issues"]} component={IssuesList} />
             <Route path="/issues/:id/view" component={IssueView} />
             <Route exact path="/issues/add" component={AddIssue} />
             <Route exact path="/issues/:id" component={Issue} />

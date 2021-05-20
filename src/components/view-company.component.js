@@ -7,6 +7,8 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import DataTable from 'react-data-table-component';
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const columnas = [
   {
@@ -79,10 +81,27 @@ export default class Company extends Component {
     CompanyDataService.deleteMachine(id)
       .then(response => {
         console.log(response.data);
-        this.props.history.push('/companies/' + this.state.currentCompany.id + "/view")
+        toast.success('Se ha eliminado la máquina ', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         this.refreshList()
       })
       .catch(e => {
+        toast.error('Se ha producido un error al eliminar la máquina', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         console.log(e);
       });
   }
@@ -97,7 +116,8 @@ export default class Company extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <h2>Fabricante {currentCompany.name}</h2>
+          <h2>Empresa {currentCompany.name}</h2>
+          <ToastContainer />
           <hr/>
 
           <div className="row mb-2">
@@ -106,7 +126,7 @@ export default class Company extends Component {
           </div>
           {currentCompany.latitude && currentCompany.longitude && <div className="row mb-2">
             <div className="col-md-2"><strong>Ciudad</strong></div>
-            <div className="col-md-8">{currentCompany.city.name}</div>
+            {currentCompany.city && <div className="col-md-8">{currentCompany.city.name}</div>}
             <div className="col-md-2">
               <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank">
                 <FontAwesomeIcon icon={faMap} className="mr-2"/>
@@ -154,6 +174,13 @@ export default class Company extends Component {
                     <td>{machine.product && machine.product.name}</td>
                     <td>{machine.serialNumber}</td>
                     <td>
+                      <Link
+                        to={"/machines/" + machine.id}
+                        className="text-primary mr-1"
+                        data-tip="Editar"
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Link>
                       <a
                         className="text-danger"
                         data-tip="Eliminar"

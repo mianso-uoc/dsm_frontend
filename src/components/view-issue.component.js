@@ -341,7 +341,6 @@ export default class Issue extends Component {
                     <th className="width20">Id</th>
                     <th className="width60">Producto</th>
                     <th className="width60">Nº serie</th>
-                    {currentIssue.status=="PENDING" && <th className="width20">Acciones</th>}
                   </tr>
                 </thead>
 
@@ -351,16 +350,6 @@ export default class Issue extends Component {
                       <td>{machine.id}</td>
                       <td>{machine.product.name}</td>
                       <td>{machine.serialNumber}</td>
-                      {currentIssue.status=="PENDING" && <td>
-                        <a
-                          className="text-danger"
-                          data-tip="Eliminar"
-                          onClick={() => {this.deleteMachine(machine.id)}}
-                        >
-                          <ReactTooltip />
-                          <FontAwesomeIcon icon={faTrash} />
-                        </a>
-                      </td>}
                     </tr>
                   ))}
                 </tbody>

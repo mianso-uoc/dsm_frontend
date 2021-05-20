@@ -239,7 +239,10 @@ export default class IssuesList extends Component {
                   <td>{new Date(issue.createDate).toLocaleDateString()}</td>
                   <td>{issue.technician && issue.technician.name}</td>
                   <td>{issue.company && issue.company.name}</td>
-                  <td><span className={"badge badge-" + issue.status}>{issue.status}</span></td>
+                  <td><span className={"badge badge-" + issue.status}>
+                    {issue.status == 'PENDING' && 'PENDIENTE'}
+                    {issue.status == 'CLOSED' && 'CERRADA'}
+                    {issue.status == 'SOLVED' && 'RESUELTA'}</span></td>
                   <td>
                     <Link
                       to={"/issues/" + issue.id + "/view"}

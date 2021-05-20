@@ -7,6 +7,8 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import DataTable from 'react-data-table-component';
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const columnas = [
   {
@@ -87,9 +89,27 @@ export default class Manufacturer extends Component {
       .then(response => {
         console.log(response.data);
         this.props.history.push('/manufacturers/' + this.state.currentManufacturer.id + "/view")
-        this.refreshList()
+        this.refreshList();
+        toast.success('Se ha eliminado el producto ' + id, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       })
       .catch(e => {
+        toast.error('Se ha producido un error al eliminar el producto', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         console.log(e);
       });
   }
@@ -105,7 +125,7 @@ export default class Manufacturer extends Component {
       <div className="row">
         <div className="col-md-12">
           <h2>Fabricante {currentManufacturer.name}</h2>
-
+          <ToastContainer />
           <div>
             <Link to={"/manufacturers/" + currentManufacturer.id + "/addProduct"} className="btn btn-info float-right">
               <FontAwesomeIcon icon={faPlus} className="mr-2"/>
