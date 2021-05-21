@@ -6,7 +6,7 @@ import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faUndo, faPlus, faComment, faPlug, faDownload, faFile } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faEdit, faUndo, faPlus, faComment, faPlug, faDownload, faFile, faMap } from '@fortawesome/free-solid-svg-icons'
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import DataTable from 'react-data-table-component';
@@ -306,7 +306,15 @@ export default class Issue extends Component {
           </div>
           {currentIssue.company && <div className="row mb-2">
             <div className="col-md-2"><strong>Empresa</strong></div>
-            <div className="col-md-10">{currentIssue.company.name}</div>
+            <div className="col-md-2">{currentIssue.company.name}</div>
+            {currentIssue.company.latitude && currentIssue.company.longitude && <div className="col-md-2">
+              <div>
+                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentIssue.company.latitude + "," + currentIssue.company.longitude} className="btn btn-success" target="_blank">
+                  <FontAwesomeIcon icon={faMap} className="mr-2"/>
+                  Mapa
+                </a>
+              </div>
+            </div>}
           </div>}
           <div className="row mb-2">
             <div className="col-md-2"><strong>Fecha de creación</strong></div>
