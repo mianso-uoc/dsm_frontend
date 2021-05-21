@@ -25,6 +25,10 @@ class LocationDataService {
     return axios.get(API_URL + `/provinces/${id}/`, { headers: authHeader() });
   }
 
+  getProvinceByCity(id) {
+    return axios.get(API_URL + `/provinces/cities/${id}/`, { headers: authHeader() });
+  }
+
   getCity(id) {
     return axios.get(API_URL + `/cities/${id}`, { headers: authHeader() });
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CompanyDataService from "../services/company.service";
+import LocationDataService from "../services/location.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo, faPlus, faMap } from '@fortawesome/free-solid-svg-icons'
@@ -35,11 +36,13 @@ export default class Company extends Component {
     this.getMachines = this.getMachines.bind(this);
     this.deleteMachine = this.deleteMachine.bind(this);
     this.refreshList = this.refreshList.bind(this);
+    this.getProvince = this.getProvince.bind(this);
 
     this.state = {
       currentCompany: {
         id: null,
-        name: ""
+        name: "",
+        province: null
       },
       message: "",
       machines: ""
@@ -54,10 +57,23 @@ export default class Company extends Component {
   getCompany(id) {
     CompanyDataService.get(id)
       .then(response => {
+        const province = this.getProvince(response.data.city.id)
         this.setState({
           currentCompany: response.data
         });
         console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  }
+
+  getProvince(id) {
+    LocationDataService.getProvinceByCity(id)
+      .then(response => {
+        this.setState({
+          province: response.data
+        });
       })
       .catch(e => {
         console.log(e);
@@ -111,7 +127,7 @@ export default class Company extends Component {
   }
 
   render() {
-    const { currentCompany, machines } = this.state;
+    const { currentCompany, machines, province } = this.state;
 
     return (
       <div className="row">
@@ -124,15 +140,21 @@ export default class Company extends Component {
             <div className="col-md-2"><strong>Dirección</strong></div>
             <div className="col-md-10">{currentCompany.address}</div>
           </div>
-          {currentCompany.latitude && currentCompany.longitude && <div className="row mb-2">
+          {province && <div className="row mb-2">
+            <div className="col-md-2"><strong>Provincia</strong></div>
+            <div className="col-md-8">{province.name}</div>
+          </div>}
+          {currentCompany.city && <div className="row mb-2">
             <div className="col-md-2"><strong>Ciudad</strong></div>
-            {currentCompany.city && <div className="col-md-8">{currentCompany.city.name}</div>}
-            <div className="col-md-2">
-              <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank">
-                <FontAwesomeIcon icon={faMap} className="mr-2"/>
-                Mapa
-              </a>
-            </div>
+            <div className="col-md-8">{currentCompany.city.name}</div>
+            {currentCompany.latitude && currentCompany.longitude &&
+              <div className="col-md-2">
+                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank">
+                  <FontAwesomeIcon icon={faMap} className="mr-2"/>
+                  Mapa
+                </a>
+              </div>
+            }
           </div>}
           <div className="row mb-2">
             <div className="col-md-2"><strong>Teléfono</strong></div>

@@ -37,7 +37,6 @@ export default class Company extends Component {
     this.updateCompany = this.updateCompany.bind(this);
     this.deleteCompany = this.deleteCompany.bind(this);
     this.renameKey = this.renameKey.bind(this);
-    this.setCityData = this.setCityData.bind(this);
 
     this.state = {
       currentCompany: {
@@ -141,11 +140,6 @@ export default class Company extends Component {
       });
   }
 
-  setCityData(e) {
-
-
-  }
-
   onChangeCountry(e) {
     const country = e;
     LocationDataService.getProvinces(e.id)
@@ -171,17 +165,25 @@ export default class Company extends Component {
 
   onChangeProvince(e) {
     const province = e;
-    const lista = province.cities;
-    lista.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-    this.setState(function(prevState) {
-      return {
-        cities: lista,
-        currentCompany: {
-          ...prevState.currentCompany,
-          province: province
-        }
-      };
-    });
+    LocationDataService.getCities(e.id)
+      .then(response => {
+        console.log(response.data);
+        response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+        this.setState(function(prevState) {
+          return {
+            currentCompany: {
+              ...prevState.currentCompany,
+              province: province
+            }
+          };
+        });
+        this.setState({
+          cities: response.data
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   onChangeCity(e) {
@@ -303,16 +305,16 @@ export default class Company extends Component {
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label htmlFor="country" className="col-sm-1 col-form-label">País{currentCompany.country && currentCompany.country.label}</label>
-                  <Select options={countries} className="col-sm-6" onChange={this.onChangeCountry} value="{country}"/>
+                  <label htmlFor="country" className="col-sm-1 col-form-label">País</label>
+                  <Select options={countries} className="col-sm-6" onChange={this.onChangeCountry}/>
                 </div>
                 <div className="form-group row">
-                  <label htmlFor="country" className="col-sm-1 col-form-label">Provincias</label>
+                  <label htmlFor="province" className="col-sm-1 col-form-label">Provincias</label>
                   <Select options={provinces} className="col-sm-6" onChange={this.onChangeProvince}/>
                 </div>
                 <div className="form-group row">
                   <label htmlFor="city" className="col-sm-1 col-form-label">Ciudad</label>
-                  <Select options={cities} className="col-sm-6" onChange={this.onChangeCity} value="{currentCompany.city}"/>
+                  <Select options={cities} className="col-sm-6" onChange={this.onChangeCity}/>
                 </div>
                 <div className="form-group row">
                   <label htmlFor="phone" className="col-sm-1 col-form-label">Teléfono</label>

@@ -42,6 +42,8 @@ export default class AddCompany extends Component {
       phone: "",
       latitude: "",
       longitude: "",
+      country: null,
+      province: null,
       city: null,
       countries: [],
       provinces: [],
@@ -103,23 +105,35 @@ export default class AddCompany extends Component {
   }
 
   onChangeCountry(e) {
-    const lista = e.provinces;
-    lista.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-    this.setState(function(prevState) {
-      return {
-        provinces: lista
-      };
-    });
+    const country = e;
+    LocationDataService.getProvinces(e.id)
+      .then(response => {
+        console.log(response.data);
+        response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+        this.setState({
+          country: country,
+          provinces: response.data
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   onChangeProvince(e) {
-    const lista = e.cities;
-    lista.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-    this.setState(function(prevState) {
-      return {
-        cities: lista
-      };
-    });
+    const province = e;
+    LocationDataService.getCities(e.id)
+      .then(response => {
+        console.log(response.data);
+        response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
+        this.setState({
+          province: province,
+          cities: response.data
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
   }
 
   onChangeCity(e) {
