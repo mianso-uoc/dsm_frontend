@@ -109,7 +109,7 @@ export default class CompaniesList extends Component {
   }
 
   render() {
-    const { searchName, companies, currentCompany, currentIndex } = this.state;
+    const { companies } = this.state;
 
     return (
       <div className="row">

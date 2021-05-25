@@ -4,7 +4,7 @@ import CompanyDataService from "../services/company.service";
 import UserDataService from "../services/user.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faUndo } from '@fortawesome/free-solid-svg-icons'
 import CheckButton from "react-validation/build/button";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -127,9 +127,6 @@ export default class Issue extends Component {
   retrieveCompanies() {
     CompanyDataService.getAll()
       .then(response => {
-        console.log(response.data);
-          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-          const updatedJson = JSON.stringify( response.data );
         this.setState({
           companies: response.data
         });
@@ -143,9 +140,6 @@ export default class Issue extends Component {
   retrieveTechnicians() {
     UserDataService.getAllByType('Technician')
       .then(response => {
-        console.log(response.data);
-          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-          const updatedJson = JSON.stringify( response.data );
         this.setState({
           technicians: response.data
         });

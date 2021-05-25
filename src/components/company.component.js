@@ -8,7 +8,7 @@ import Select from 'react-select'
 import CheckButton from "react-validation/build/button";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const required = value => {
@@ -262,7 +262,7 @@ export default class Company extends Component {
   }
 
   render() {
-    const { currentCompany, companies, countries, provinces, cities } = this.state;
+    const { currentCompany, countries, provinces, cities } = this.state;
 
     return (
       <div className="row">

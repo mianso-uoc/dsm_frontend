@@ -109,7 +109,7 @@ export default class ManufacturersList extends Component {
   }
 
   render() {
-    const { searchName, manufacturers, currentManufacturer, currentIndex } = this.state;
+    const { manufacturers } = this.state;
 
     return (
       <div className="row">

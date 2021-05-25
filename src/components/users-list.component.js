@@ -1,80 +1,33 @@
 import React, { Component } from "react";
 import UserDataService from "../services/user.service";
+import AuthService from "../services/auth.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
-import DataTable from 'react-data-table-component';
-
-const columnas = [
-  {
-    name: "Id",
-    selector: "id",
-    sortable: true
-  },
-  {
-    name: "Nombre",
-    selector: "name",
-    sortable: true
-  },
-  {
-    name: "Email",
-    selector: "email",
-    sortable: true
-  },
-  {
-    name: "Empresa",
-    selector: "",
-    sortable: false,
-    cell: row => <span>{row.company && row.company.name}</span>
-  },
-  {
-    name: "Rol",
-    selector: "type",
-    sortable: true,
-    cell: row => <span class={"badge badge-" + row.type}>{row.type}</span>
-  },
-  {
-    name: 'Acciones',
-    sortable: false,
-    cell: row => <a href={"/users/" + row.id} data-tip="Editar" class="text-info btn-sm"><ReactTooltip /><FontAwesomeIcon icon={faEdit} /></a>,
-  }
-]
-
-const paginacionOpciones = {
-  rowsPerPageText: "Filas por página",
-  rangeSeparatorText: "de",
-  selectAllRowsItem: true,
-  selectAllrowsItemText: "todos"
-}
 
 export default class UsersList extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchName = this.onChangeSearchName.bind(this);
     this.retrieveUsers = this.retrieveUsers.bind(this);
     this.refreshList = this.refreshList.bind(this);
-    this.setActiveUser = this.setActiveUser.bind(this);
-    this.searchName = this.searchName.bind(this);
 
     this.state = {
       users: [],
       currentUser: null,
-      currentIndex: -1,
-      searchName: ""
+      currentIndex: -1
     };
   }
 
   componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+      });
+    }
     this.retrieveUsers();
-  }
-
-  onChangeSearchName(e) {
-    const searchName = e.target.value;
-
-    this.setState({
-      searchName: searchName
-    });
   }
 
   retrieveUsers() {
@@ -98,26 +51,6 @@ export default class UsersList extends Component {
     });
   }
 
-  setActiveUser(user, index) {
-    this.setState({
-      currentUser: user,
-      currentIndex: index
-    });
-  }
-
-  searchName() {
-    UserDataService.findByName(this.state.searchName)
-      .then(response => {
-        this.setState({
-          users: response.data
-        });
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
   deleteUser(id) {
     UserDataService.delete(id)
       .then(response => {
@@ -131,30 +64,10 @@ export default class UsersList extends Component {
   }
 
   render() {
-    const { searchName, users, currentUser, currentIndex } = this.state;
+    const { users, currentUser } = this.state;
 
     return (
       <div className="row">
-        {/*<div className="col-md-12">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Buscar por nombre"
-              value={searchName}
-              onChange={this.onChangeSearchName}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchName}
-              >
-                Buscar
-              </button>
-            </div>
-          </div>
-        </div>*/}
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Usuarios</h2>
@@ -181,7 +94,7 @@ export default class UsersList extends Component {
             <tbody>
               {users &&
               users.map((user, index) => (
-                <tr onClick={() => this.setActiveUser(user, index)} key={index}>
+                <tr key={index}>
                   <td>{user.id}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
@@ -197,14 +110,14 @@ export default class UsersList extends Component {
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </Link>
-                    <button
+                    {currentUser && currentUser.id != user.id && <button
                       className="btn btn-sm btn-danger"
                       data-tip="Eliminar"
                       onClick={() => {this.deleteUser(user.id)}}
                     >
                       <ReactTooltip />
                       <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    </button>}
                   </td>
                 </tr>
               ))}
@@ -215,17 +128,7 @@ export default class UsersList extends Component {
           {users.length == 0 &&
             <div className="alert alert-warning">No hay usuarios</div>
           }
-          {/*
-          <DataTable
-            columns={columnas}
-            data={users}
-            pagination
-            paginationComponentOptions={paginacionOpciones}
-            striped
-            highlightOnHover
-            defaultSortField="Id"
-            noHeader
-          />*/}
+
         </div>
       </div>
     );

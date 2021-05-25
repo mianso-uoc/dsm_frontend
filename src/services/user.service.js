@@ -22,7 +22,11 @@ class UserDataService {
   }
 
   update(id, data, companyId) {
-    return axios.put(API_URL + `/users/${id}?companyId=${companyId}`, data, { headers: authHeader() });
+    if (companyId == undefined) {
+      return axios.put(API_URL + `/users/${id}`, data, { headers: authHeader() });
+    } else {
+      return axios.put(API_URL + `/users/${id}?companyId=${companyId}`, data, { headers: authHeader() });
+    }
   }
 
   delete(id) {

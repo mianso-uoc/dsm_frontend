@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
+import PrivateRoute from './PrivateRoute'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import { faUser, faTools, faKey, faSignOutAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faTools, faSignOutAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -122,30 +121,31 @@ class App extends Component {
           <Switch>
             <Route exact path={["/"]} component={Login} />
             <Route exact path={["/login"]} component={Login} />
-            <Route exact path={["/home"]} component={Home} />
-            <Route exact path={["/users"]} component={UsersList} />
-            <Route exact path="/users/add" component={AddUser} />
-            <Route path="/users/:id" component={User} />
-            <Route exact path={["/manufacturers"]} component={ManufacturersList} />
-            <Route exact path="/manufacturers/add" component={AddManufacturer} />
-            <Route path="/manufacturers/:id/view" component={ManufacturerView} />
-            <Route path="/manufacturers/:id/addProduct" component={AddProduct} />
-            <Route path="/manufacturers/:id" component={Manufacturer} />
-            <Route path="/products/:id" component={Product} />
+            <PrivateRoute exact path={["/home"]} component={Home} />
+            <PrivateRoute exact path={["/users"]} component={UsersList} />
+            <PrivateRoute exact path="/users/add" component={AddUser} />
+            <PrivateRoute path="/users/:id" component={User} />
+            <PrivateRoute exact path={["/manufacturers"]} component={ManufacturersList} />
+            <PrivateRoute exact path="/manufacturers/add" component={AddManufacturer} />
+            <PrivateRoute path="/manufacturers/:id/view" component={ManufacturerView} />
+            <PrivateRoute path="/manufacturers/:id/addProduct" component={AddProduct} />
+            <PrivateRoute path="/manufacturers/:id" component={Manufacturer} />
+            <PrivateRoute path="/products/:id" component={Product} />
 
-            <Route exact path={["/companies"]} component={CompaniesList} />
-            <Route exact path="/companies/add" component={AddCompany} />
-            <Route path="/companies/:id/view" component={CompanyView} />
-            <Route path="/companies/:id/addMachine" component={AddMachine} />
-            <Route path="/companies/:id" component={Company} />
-            <Route path="/machines/:id" component={Machine} />
+            <PrivateRoute exact path={["/companies"]} component={CompaniesList} />
+            <PrivateRoute exact path="/companies/add" component={AddCompany} />
+            <PrivateRoute path="/companies/:id/view" component={CompanyView} />
+            <PrivateRoute path="/companies/:id/addMachine" component={AddMachine} />
+            <PrivateRoute path="/companies/:id" component={Company} />
+            <PrivateRoute path="/machines/:id" component={Machine} />
 
-            <Route exact path={["/issues"]} component={IssuesList} />
-            <Route path="/issues/:id/view" component={IssueView} />
-            <Route exact path="/issues/add" component={AddIssue} />
-            <Route exact path="/issues/:id" component={Issue} />
-            <Route exact path="/issues/:id/addDocument" component={AddDocument} />
-            <Route exact path="/issues/:id/machines" component={IssueMachines} />
+            <PrivateRoute exact path={["/issues"]} component={IssuesList} />
+            <PrivateRoute path="/issues/:id/view" component={IssueView} />
+            <PrivateRoute exact path="/issues/add" component={AddIssue} />
+            <PrivateRoute exact path="/issues/:id" component={Issue} />
+            <PrivateRoute exact path="/issues/:id/addDocument" component={AddDocument} />
+            <PrivateRoute exact path="/issues/:id/machines" component={IssueMachines} />
+            <Route exact path={["*"]} component={Login} />
 
           </Switch>
         </div>

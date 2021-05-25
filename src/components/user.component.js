@@ -11,6 +11,7 @@ export default class User extends Component {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
     this.onChangeCompany = this.onChangeCompany.bind(this);
     this.getUser = this.getUser.bind(this);
@@ -22,6 +23,7 @@ export default class User extends Component {
         id: null,
         name: "",
         email: "",
+        password: "",
         type: "Administrator",
         companyId: null,
         companies: []
@@ -75,6 +77,20 @@ export default class User extends Component {
       };
     });
   }
+
+  onChangePassword(e) {
+    const password = e.target.value;
+
+    this.setState(function(prevState) {
+      return {
+        currentUser: {
+          ...prevState.currentUser,
+          password: password
+        }
+      };
+    });
+  }
+
   onChangeType(e) {
     const type = e.target.value;
 
@@ -109,8 +125,11 @@ export default class User extends Component {
           currentUser: response.data
         });
         if (this.state.type == "Administrator") {
-          this.state.customerId = response.data.customer.id;
+          this.setState({
+            customerId: response.data.customer.id
+          });
         }
+        this.state.currentUser.password = "";
         console.log(response.data);
       })
       .catch(e => {
@@ -119,8 +138,6 @@ export default class User extends Component {
   }
 
   updateUser() {
-    console.log("GUARDANDO");
-    console.log(this.state.currentUser);
     UserDataService.update(
       this.state.currentUser.id,
       this.state.currentUser,
@@ -180,6 +197,19 @@ export default class User extends Component {
                     required
                     value={currentUser.email}
                     onChange={this.onChangeEmail}
+                    name="email"
+                  />
+                </div>
+
+                <div className="form-group row">
+                  <label htmlFor="email" className="col-sm-1 col-form-label">Password</label>
+                  <input
+                    type="text"
+                    className="form-control col-sm-6"
+                    id="email"
+                    required
+                    value={currentUser.password}
+                    onChange={this.onChangePassword}
                     name="email"
                   />
                 </div>

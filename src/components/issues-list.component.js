@@ -3,8 +3,7 @@ import IssueDataService from "../services/issue.service";
 import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faPlus, faEye } from '@fortawesome/free-solid-svg-icons'
-import ReactTooltip from 'react-tooltip';
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import DatePicker from "react-datepicker";
 
@@ -50,7 +49,20 @@ export default class IssuesList extends Component {
       companyId = this.state.company.id;
     }
 
-    IssueDataService.find(e.getTime(), this.state.endDate.getTime(), companyId)
+    var start = 0;
+    var end = 0;
+
+    if (e != null) {
+      start = e.getTime();
+    }
+
+    if (this.state.endDate != null) {
+      end = this.state.endDate.getTime();
+    } else {
+      end = (new Date()).getTime();
+    }
+
+    IssueDataService.find(start, end, companyId)
       .then(response => {
         this.setState({
           issues: response.data
@@ -76,8 +88,10 @@ export default class IssuesList extends Component {
       start = this.state.startDate.getTime();
     }
 
-    if (this.state.endDate != undefined) {
-      end = this.state.endDate.getTime();
+    if (e != undefined) {
+      end = e.getTime();
+    } else {
+      end = (new Date()).getTime();
     }
 
     if (this.state.company != undefined) {
@@ -185,7 +199,7 @@ export default class IssuesList extends Component {
   }
 
   render() {
-    const { searchName, issues, currentIssue, currentIndex, companies, startDate, endDate } = this.state;
+    const { issues, companies, startDate, endDate } = this.state;
 
     return (
       <div className="row">

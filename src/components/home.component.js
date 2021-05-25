@@ -6,9 +6,8 @@ import IssueDataService from "../services/issue.service";
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faPlus, faEye, faUser, faIndustry, faBoxes } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faEye, faUser, faIndustry, faBoxes } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
-import Select from 'react-select'
 import DatePicker from "react-datepicker";
 
 export default class Home extends Component {
@@ -25,6 +24,7 @@ export default class Home extends Component {
       issues: [],
       startDate: 0,
       endDate: currentDate,
+      currentDate: currentDate
     };
   }
 
@@ -76,7 +76,18 @@ export default class Home extends Component {
       startDate: e
     });
 
-    IssueDataService.find(e.getTime(), this.state.endDate.getTime(), this.state.currentUser.company.id)
+    var start = 0;
+    var end = 0;
+
+    if (this.state.startDate > 0) {
+      start = this.state.startDate.getTime();
+    }
+
+    if (this.state.endDate != undefined) {
+      end = this.state.currentDate.getTime();
+    }
+
+    IssueDataService.find(start, end, this.state.currentUser.company.id)
       .then(response => {
         this.setState({
           issues: response.data
@@ -102,7 +113,7 @@ export default class Home extends Component {
     }
 
     if (this.state.endDate != undefined) {
-      end = this.state.endDate.getTime();
+      end = this.state.currentDate.getTime();
     }
 
     IssueDataService.find(start, end, this.state.currentUser.company.id)

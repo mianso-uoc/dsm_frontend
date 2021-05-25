@@ -5,8 +5,7 @@ import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
-import Select from 'react-select'
+import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";

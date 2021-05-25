@@ -4,30 +4,9 @@ import LocationDataService from "../services/location.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo, faPlus, faMap } from '@fortawesome/free-solid-svg-icons'
-import Card from 'react-bootstrap/Card';
-import Modal from 'react-bootstrap/Modal';
-import DataTable from 'react-data-table-component';
 import ReactTooltip from 'react-tooltip';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const columnas = [
-  {
-    name: "Id",
-    selector: "id",
-    sortable: true
-  },
-  {
-    name: "Nombre",
-    selector: "name",
-    sortable: true
-  },
-  //{
-    //name: '',
-    //sortable: false,
-    //cell: row => <button className="btn btn-sm btn-danger" data-tip="Eliminar" onClick={() => {this.deleteMachine(this.state.currentCompany.id)}}><FontAwesomeIcon icon={faTrash} /></button>
-  //}
-]
 
 export default class Company extends Component {
   constructor(props) {
@@ -57,7 +36,6 @@ export default class Company extends Component {
   getCompany(id) {
     CompanyDataService.get(id)
       .then(response => {
-        const province = this.getProvince(response.data.city.id)
         this.setState({
           currentCompany: response.data
         });
@@ -149,7 +127,7 @@ export default class Company extends Component {
             <div className="col-md-8">{currentCompany.city.name}</div>
             {currentCompany.latitude && currentCompany.longitude &&
               <div className="col-md-2">
-                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank">
+                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentCompany.latitude + "," + currentCompany.longitude} className="btn btn-success float-right" target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faMap} className="mr-2"/>
                   Mapa
                 </a>

@@ -259,15 +259,15 @@ export default class AddCompany extends Component {
             </div>
             <div className="form-group row">
               <label htmlFor="country" className="col-sm-1 col-form-label">País</label>
-              <Select options={countries} className="col-sm-6" onChange={this.onChangeCountry}/>
+              <Select options={countries} placeholder="Seleccione país" className="col-sm-6" onChange={this.onChangeCountry}/>
             </div>
             <div className="form-group row">
               <label htmlFor="country" className="col-sm-1 col-form-label">Provincias</label>
-              <Select options={provinces} className="col-sm-6" onChange={this.onChangeProvince}/>
+              <Select options={provinces} placeholder="Seleccione provincia" className="col-sm-6" onChange={this.onChangeProvince}/>
             </div>
             <div className="form-group row">
               <label htmlFor="city" className="col-sm-1 col-form-label">Ciudad</label>
-              <Select options={cities} className="col-sm-6" onChange={this.onChangeCity}/>
+              <Select options={cities} placeholder="Seleccione población" className="col-sm-6" onChange={this.onChangeCity}/>
             </div>
             <div className="form-group row">
               <label htmlFor="phone" className="col-sm-1 col-form-label">Teléfono</label>

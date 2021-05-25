@@ -3,29 +3,8 @@ import IssueDataService from "../services/issue.service";
 import CompanyDataService from "../services/company.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faUndo, faPlus, faMinus, faMap, faPlug } from '@fortawesome/free-solid-svg-icons'
-import Card from 'react-bootstrap/Card';
-import Modal from 'react-bootstrap/Modal';
-import DataTable from 'react-data-table-component';
+import { faUndo, faPlus, faPlug } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
-
-const columnas = [
-  {
-    name: "Id",
-    selector: "id",
-    sortable: true
-  },
-  {
-    name: "Nombre",
-    selector: "name",
-    sortable: true
-  },
-  //{
-    //name: '',
-    //sortable: false,
-    //cell: row => <button className="btn btn-sm btn-danger" data-tip="Eliminar" onClick={() => {this.deleteMachine(this.state.currentCompany.id)}}><FontAwesomeIcon icon={faTrash} /></button>
-  //}
-]
 
 export default class Company extends Component {
   constructor(props) {
@@ -40,8 +19,7 @@ export default class Company extends Component {
       currentIssue: null,
       machines: [],
       estado: "",
-      message: "",
-      machines: ""
+      message: ""
     };
   }
 
@@ -78,11 +56,6 @@ export default class Company extends Component {
   getIssue(id) {
     IssueDataService.get(id)
       .then(response => {
-        var estado = "Pendiente";
-        if(response.data.status == "SOLVED")
-          estado = "Resuelta";
-        else if(response.data.status == "CLOSED")
-          estado = "Cerrada";
         this.setState({
           currentIssue: response.data
         });

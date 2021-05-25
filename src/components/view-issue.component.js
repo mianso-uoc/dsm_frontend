@@ -7,9 +7,7 @@ import UserService from "../services/user.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo, faPlus, faComment, faPlug, faDownload, faFile, faMap } from '@fortawesome/free-solid-svg-icons'
-import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
-import DataTable from 'react-data-table-component';
 import ReactTooltip from 'react-tooltip';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -309,7 +307,7 @@ export default class Issue extends Component {
             <div className="col-md-2">{currentIssue.company.name}</div>
             {currentIssue.company.latitude && currentIssue.company.longitude && <div className="col-md-2">
               <div>
-                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentIssue.company.latitude + "," + currentIssue.company.longitude} className="btn btn-success" target="_blank">
+                <a href={"https://www.google.com/maps/search/?api=1&query=" + currentIssue.company.latitude + "," + currentIssue.company.longitude} className="btn btn-success" target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faMap} className="mr-2"/>
                   Mapa
                 </a>

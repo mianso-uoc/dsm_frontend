@@ -3,37 +3,9 @@ import ManufacturerDataService from "../services/manufacturer.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faUndo, faPlus } from '@fortawesome/free-solid-svg-icons'
-import Card from 'react-bootstrap/Card';
-import Modal from 'react-bootstrap/Modal';
-import DataTable from 'react-data-table-component';
 import ReactTooltip from 'react-tooltip';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const columnas = [
-  {
-    name: "Id",
-    selector: "id",
-    sortable: true
-  },
-  {
-    name: "Nombre",
-    selector: "name",
-    sortable: true
-  },
-  //{
-    //name: '',
-    //sortable: false,
-    //cell: row => <button className="btn btn-sm btn-danger" data-tip="Eliminar" onClick={() => {this.deleteProduct(this.state.currentManufacturer.id)}}><FontAwesomeIcon icon={faTrash} /></button>
-  //}
-]
-
-const paginacionOpciones = {
-  rowsPerPageText: "Filas por página",
-  rangeSeparatorText: "de",
-  selectAllRowsItem: true,
-  selectAllrowsItemText: "todos"
-}
 
 export default class Manufacturer extends Component {
   constructor(props) {

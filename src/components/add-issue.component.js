@@ -129,9 +129,6 @@ console.log(technician);
   retrieveCompanies() {
     CompanyDataService.getAll()
       .then(response => {
-        console.log(response.data);
-          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-          const updatedJson = JSON.stringify( response.data );
         this.setState({
           companies: response.data
         });
@@ -145,9 +142,6 @@ console.log(technician);
   retrieveTechnicians() {
     UserDataService.getAllByType('Technician')
       .then(response => {
-        console.log(response.data);
-          response.data.forEach( obj => this.renameKey( obj, 'name', 'label' ) );
-          const updatedJson = JSON.stringify( response.data );
         this.setState({
           technicians: response.data
         });

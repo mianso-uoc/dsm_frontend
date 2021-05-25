@@ -3,7 +3,7 @@ import MachineDataService from "../services/company.service";
 import ManufacturerDataService from "../services/manufacturer.service";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
