@@ -76,15 +76,23 @@ export default class Home extends Component {
       startDate: e
     });
 
+    var companyId = null;
+
+    if (this.state.company != undefined) {
+      companyId = this.state.company.id;
+    }
+
     var start = 0;
     var end = 0;
 
-    if (this.state.startDate > 0) {
-      start = this.state.startDate.getTime();
+    if (e != null) {
+      start = e.getTime();
     }
 
-    if (this.state.endDate != undefined) {
-      end = this.state.currentDate.getTime();
+    if (this.state.endDate != null) {
+      end = this.state.endDate.getTime();
+    } else {
+      end = (new Date()).getTime();
     }
 
     IssueDataService.find(start, end, this.state.currentUser.company.id)
@@ -107,13 +115,20 @@ export default class Home extends Component {
 
     var start = 0;
     var end = 0;
+    var companyId;
 
     if (this.state.startDate > 0) {
       start = this.state.startDate.getTime();
     }
 
-    if (this.state.endDate != undefined) {
-      end = this.state.currentDate.getTime();
+    if (e != undefined) {
+      end = e.getTime();
+    } else {
+      end = (new Date()).getTime();
+    }
+
+    if (this.state.company != undefined) {
+      companyId = this.state.company.id;
     }
 
     IssueDataService.find(start, end, this.state.currentUser.company.id)

@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
 import ReactTooltip from 'react-tooltip';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class UsersList extends Component {
   constructor(props) {
@@ -45,20 +47,34 @@ export default class UsersList extends Component {
 
   refreshList() {
     this.retrieveUsers();
-    this.setState({
-      currentUser: null,
-      currentIndex: -1
-    });
   }
 
   deleteUser(id) {
     UserDataService.delete(id)
       .then(response => {
         console.log(response.data);
+        toast.success('Se ha eliminado el usuario', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         this.props.history.push('/users');
         this.refreshList();
       })
       .catch(e => {
+        toast.error('Se ha producido un error al eliminar el usuario', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
         console.log(e);
       });
   }
@@ -71,6 +87,7 @@ export default class UsersList extends Component {
         <div className="col-md-12">
           <div className="row">
             <h2 className="col-md-10">Usuarios</h2>
+            <ToastContainer />
             <div className="col-md-2">
               <Link to={"/users/add"} className="btn btn-info float-right">
                 <FontAwesomeIcon icon={faPlus} className="mr-2"/>
@@ -98,7 +115,11 @@ export default class UsersList extends Component {
                   <td>{user.id}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td><span className={"badge badge-" + user.type}>{user.type}</span></td>
+                  <td><span className={"badge badge-" + user.type}>
+                    {user.type == "Customer" && "CLIENTE"}
+                    {user.type == "Administrator" && "ADMINISTRADOR"}
+                    {user.type == "Technician" && "TÉCNICO"}
+                    </span></td>
                   <td>
                     {user.type == 'Customer'&& user.company.name}
                   </td>

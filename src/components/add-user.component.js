@@ -5,12 +5,15 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faUndo } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class AddUser extends Component {
   constructor(props) {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
     this.onChangeCompany = this.onChangeCompany.bind(this);
     this.saveUser = this.saveUser.bind(this);
@@ -20,6 +23,7 @@ export default class AddUser extends Component {
       id: null,
       name: "",
       email: "",
+      password: "",
       type: "Administrator",
       company: null,
       companies: [],
@@ -53,6 +57,13 @@ export default class AddUser extends Component {
       name: e.target.value
     });
   }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value
+    });
+  }
+
   onChangeEmail(e) {
     this.setState({
       email: e.target.value
@@ -74,6 +85,7 @@ export default class AddUser extends Component {
       id: 0,
       name: this.state.name,
       email: this.state.email,
+      password: this.state.password,
       type: this.state.type
     };
 
@@ -88,6 +100,7 @@ export default class AddUser extends Component {
           id: response.data.id,
           name: response.data.name,
           email: response.data.email,
+          password: response.data.password,
           type: response.data.type,
           companyId: response.data.companyId,
 
@@ -97,7 +110,15 @@ export default class AddUser extends Component {
         this.props.history.push('/users')
       })
       .catch(e => {
-        console.log(e);
+        toast.error('Se ha producido un error al crear el usuario', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       });
   }
 
@@ -106,6 +127,7 @@ export default class AddUser extends Component {
       id: null,
       name: "",
       email: "",
+      password: "",
       type: "Administrator",
       company: null,
 
@@ -131,6 +153,7 @@ export default class AddUser extends Component {
         ) : (
           <div>
             <h4>Nuevo Usuario</h4>
+            <ToastContainer />
             <div className="form-group row">
               <label htmlFor="name" className="col-sm-1 col-form-label">Nombre</label>
               <input
@@ -153,6 +176,19 @@ export default class AddUser extends Component {
                 required
                 value={this.state.email}
                 onChange={this.onChangeEmail}
+                name="email"
+              />
+            </div>
+
+            <div className="form-group row">
+              <label htmlFor="password" className="col-sm-1 col-form-label">Password</label>
+              <input
+                type="password"
+                className="form-control col-sm-6"
+                id="password"
+                required
+                value={this.state.password}
+                onChange={this.onChangePassword}
                 name="email"
               />
             </div>

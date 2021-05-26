@@ -110,7 +110,13 @@ class App extends Component {
           </div>}
           {currentUser && <div className="navbar-nav ml-auto">
             <NavDropdown title={currentUser.name} id="basic-nav-dropdown">
-              <NavDropdown.Header><FontAwesomeIcon icon={faUser} className="mr-2"/>{currentUser.email}<p><span className="badge badge-warning mr-2">{currentUser.type}</span></p></NavDropdown.Header>
+              <NavDropdown.Header><FontAwesomeIcon icon={faUser} className="mr-2"/>{currentUser.email}<p>
+                <span className={"badge badge-" + currentUser.type}>
+                  {currentUser.type == "Customer" && "CLIENTE"}
+                  {currentUser.type == "Administrator" && "ADMINISTRADOR"}
+                  {currentUser.type == "Technician" && "T…CNICO"}
+                  </span>
+                </p></NavDropdown.Header>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/login" onClick={() => {this.logOut()}}><FontAwesomeIcon icon={faSignOutAlt} className="mr-2"/>Cerrar sesi√≥n</NavDropdown.Item>
             </NavDropdown>
