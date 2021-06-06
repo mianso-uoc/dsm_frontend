@@ -114,7 +114,7 @@ class App extends Component {
                 <span className={"badge badge-" + currentUser.type}>
                   {currentUser.type == "Customer" && "CLIENTE"}
                   {currentUser.type == "Administrator" && "ADMINISTRADOR"}
-                  {currentUser.type == "Technician" && "TÉCNICO"}
+                  {currentUser.type == "Technician" && "TÃ‰CNICO"}
                   </span>
                 </p></NavDropdown.Header>
               <NavDropdown.Divider />

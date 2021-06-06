@@ -204,7 +204,7 @@ export default class User extends Component {
                 <div className="form-group row">
                   <label htmlFor="email" className="col-sm-1 col-form-label">Password</label>
                   <input
-                    type="text"
+                    type="password"
                     className="form-control col-sm-6"
                     id="email"
                     required
